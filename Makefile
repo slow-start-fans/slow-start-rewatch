@@ -2,7 +2,7 @@ SHELL:=/usr/bin/env bash
 
 .PHONY: lint
 lint:
-	mypy slow_start_rewatch tests/test_example
+	mypy slow_start_rewatch tests
 	flake8 .
 	doc8 -q docs
 
