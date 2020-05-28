@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="assets/happy_shion.gif" width="384" height="360" />
+</p>
+
+
 # Slow Start Rewatch
 
 [![Build Status](https://travis-ci.org/slow-start-fans/slow-start-rewatch.svg?branch=master)](https://travis-ci.org/slow-start-fans/slow-start-rewatch)
