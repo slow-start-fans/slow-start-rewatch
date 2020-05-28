@@ -5,7 +5,7 @@ import pytest
 from slow_start_rewatch.example import some_function
 
 
-@pytest.mark.parametrize(('first', 'second', 'expected'), [
+@pytest.mark.parametrize(("first", "second", "expected"), [
     (1, 2, 3),
     (2, 4, 6),
     (-2, -3, -5),
