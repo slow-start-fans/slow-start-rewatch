@@ -1,0 +1,6 @@
+[report]
+
+# The main entry point excluded from the report:
+# https://stackoverflow.com/questions/5850268/how-to-test-or-mock-if-name-main-contents/5850364#5850364
+exclude_lines =
+    if __name__ == .__main__.:

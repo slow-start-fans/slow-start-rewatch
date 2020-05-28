@@ -46,7 +46,7 @@ We use `mypy` to run type checks on our code.
 To use it:
 
 ```bash
-mypy slow_start_rewatch tests/test_example
+mypy slow_start_rewatch tests
 ```
 
 This step is mandatory during the CI.
