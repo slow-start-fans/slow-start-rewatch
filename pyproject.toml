@@ -51,3 +51,6 @@ doc8 = "^0.8"
 m2r = "^0.2"
 tomlkit = "^0.6"
 autopep8 = "^1.5.2"
+
+[tool.poetry.scripts]
+slow-start-rewatch = "slow_start_rewatch.__main__:main"
