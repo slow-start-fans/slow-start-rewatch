@@ -1,17 +1,24 @@
-# slow-start-rewatch
+# Slow Start Rewatch
 
-[![Build Status](https://travis-ci.com/slow-start-fans/slow-start-rewatch.svg?branch=master)](https://travis-ci.com/slow-start-fans/slow-start-rewatch)
+[![Build Status](https://travis-ci.org/slow-start-fans/slow-start-rewatch.svg?branch=master)](https://travis-ci.org/slow-start-fans/slow-start-rewatch)
 [![Coverage](https://coveralls.io/repos/github/slow-start-fans/slow-start-rewatch/badge.svg?branch=master)](https://coveralls.io/github/slow-start-fans/slow-start-rewatch?branch=master)
 [![Python Version](https://img.shields.io/pypi/pyversions/slow-start-rewatch.svg)](https://pypi.org/project/slow-start-rewatch/)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
 
+
+## Missions
+
 Make cute things happen!
+
+Provide a command-line utility for hosting an awesome Slow Start Rewatch.
 
 
 ## Features
 
+- Schedule a submission of Reddit posts (TBD)
+- Templates-based posts (TBD)
+- Reddit authorization via OAuth2 using a local HTTP server with cute GIFs (TBD)
 - Fully typed with annotations and checked with mypy, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
-- Add yours!
 
 
 ## Installation
@@ -21,15 +28,12 @@ pip install slow-start-rewatch
 ```
 
 
-## Example
+## Usage
 
-Showcase how your project can be used:
+Launch the program from the command line:
 
-```python
-from slow_start_rewatch.example import some_function
-
-print(some_function(3, 4))
-# => 7
+```bash
+slow-start-rewatch
 ```
 
 ## License
@@ -39,4 +43,4 @@ print(some_function(3, 4))
 
 ## Credits
 
-This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package). Current template version is: [084fb1b54d4fab37583ca85faf5c52abb3356499](https://github.com/wemake-services/wemake-python-package/tree/084fb1b54d4fab37583ca85faf5c52abb3356499). See what is [updated](https://github.com/wemake-services/wemake-python-package/compare/084fb1b54d4fab37583ca85faf5c52abb3356499...master) since then.
+This project was generated with [`wemake-python-package`](https://github.com/wemake-services/wemake-python-package).
