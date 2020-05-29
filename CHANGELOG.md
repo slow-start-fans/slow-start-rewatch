@@ -6,6 +6,7 @@ We follow [Semantic Versions](https://semver.org/).
 ## Version 0.1.1 (unreleased)
 
 - Configure logging with `structlog`
+- Implement `--debug` CLI option (sets the logging level to `DEBUG`)
 
 
 ## Version 0.1.0

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import logging
 import sys
 from logging.config import dictConfig
 
@@ -60,9 +61,13 @@ structlog.configure(
 
 
 @click.command()
+@click.option("--debug", is_flag=True)
 @click.version_option(version=version(), prog_name=distribution_name)
-def main() -> None:
+def main(debug) -> None:
     """Main entry point for CLI."""
+    if debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+
     sys.exit(0)
 
 
