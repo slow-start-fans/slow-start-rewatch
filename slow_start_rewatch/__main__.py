@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import sys
 from logging.config import dictConfig
 
 import click
 import structlog
 
+from slow_start_rewatch.app import App
+from slow_start_rewatch.config import Config
 from slow_start_rewatch.version import distribution_name, version
 
 # Set up logging:
@@ -68,7 +69,11 @@ def main(debug) -> None:
     if debug:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    sys.exit(0)
+    config = Config()
+
+    app = App(config)
+
+    app.run()
 
 
 if __name__ == "__main__":

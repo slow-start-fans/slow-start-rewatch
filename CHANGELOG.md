@@ -9,6 +9,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Implement `--debug` CLI option (sets the logging level to `DEBUG`)
 - Add class `Config` that provides configuration for the Slow Start Rewatch
 - Add a substitution of placeholders to the `Config` class
+- Add class `App` - the main application class
 
 
 ## Version 0.1.0

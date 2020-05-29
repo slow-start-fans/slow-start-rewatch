@@ -1,31 +1,38 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from unittest.mock import patch
 
 from click.testing import CliRunner
 
 from slow_start_rewatch.__main__ import main
+from slow_start_rewatch.app import App
 
 
-def test_run_successfully():
+@patch.object(App, "run")
+def test_run_successfully(mock_run):
     """Test launching the program without params."""
     runner = CliRunner()
 
     cli_result = runner.invoke(main)
+    assert mock_run.call_count == 1
     assert cli_result.exit_code == 0
     assert logging.getLogger().getEffectiveLevel() == logging.CRITICAL
 
 
-def test_check_version():
+@patch.object(App, "run")
+def test_check_version(mock_run):
     """Test the launch with the ``--version`` option."""
     runner = CliRunner()
 
     cli_result = runner.invoke(main, ["--version"])
     assert cli_result.exit_code == 0
     assert "slow-start-rewatch, version" in cli_result.output
+    assert mock_run.call_count == 0
 
 
-def test_debug(request):
+@patch.object(App, "run")
+def test_debug(mock_run, request):
     """
     Test the launch with the ``--debug`` option.
 
