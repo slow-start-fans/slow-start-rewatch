@@ -7,6 +7,7 @@ We follow [Semantic Versions](https://semver.org/).
 
 - Configure logging with `structlog`
 - Implement `--debug` CLI option (sets the logging level to `DEBUG`)
+- Add class `Config` that provides configuration for the Slow Start Rewatch
 
 
 ## Version 0.1.0

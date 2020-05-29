@@ -1,0 +1,6 @@
+heartwarming_anime:
+  name: Slow Start
+
+cute_girls: True
+
+data_dir: "${home_dir}${ps}slow_start_rewatch"
