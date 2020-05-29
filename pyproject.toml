@@ -32,6 +32,8 @@ classifiers = [
 python = "^3.6"
 click = "^7.1.2"
 importlib_metadata = "^1.6.0"
+structlog = "^20.1.0"
+colorama = "^0.4.3"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.770"

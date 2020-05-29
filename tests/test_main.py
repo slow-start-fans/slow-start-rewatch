@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from click.testing import CliRunner
 
 from slow_start_rewatch.__main__ import main
@@ -11,6 +13,7 @@ def test_run_successfully():
 
     cli_result = runner.invoke(main)
     assert cli_result.exit_code == 0
+    assert logging.getLogger().getEffectiveLevel() == logging.CRITICAL
 
 
 def test_check_version():
