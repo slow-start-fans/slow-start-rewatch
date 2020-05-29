@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import sys
+import traceback
 from logging.config import dictConfig
 
 import click
@@ -8,6 +10,7 @@ import structlog
 
 from slow_start_rewatch.app import App
 from slow_start_rewatch.config import Config
+from slow_start_rewatch.exceptions import SlowStartRewatchException
 from slow_start_rewatch.version import distribution_name, version
 
 # Set up logging:
@@ -59,6 +62,7 @@ structlog.configure(
     wrapper_class=structlog.stdlib.BoundLogger,
     cache_logger_on_first_use=True,
 )
+log = structlog.get_logger()
 
 
 @click.command()
@@ -73,7 +77,23 @@ def main(debug) -> None:
 
     app = App(config)
 
-    app.run()
+    try:
+        app.run()
+    except SlowStartRewatchException as exception:
+        click.echo(click.style(str(exception), fg="red"), err=True)
+
+        if exception.hint:
+            click.echo(exception.hint)
+
+        sys.exit(exception.exit_code)
+    except Exception:
+        log.exception("unhandled_exception")
+        click.echo(
+            click.style("An unexpected error has occurred:\n", fg="red") +
+            traceback.format_exc(),
+            err=True,
+        )
+        sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add a substitution of placeholders to the `Config` class
 - Add class `App` - the main application class
 - Add class `SlowStartRewatchException` - the base class for exceptions
+- Set up exception handling
 
 
 ## Version 0.1.0
