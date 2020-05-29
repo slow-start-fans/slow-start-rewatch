@@ -55,9 +55,9 @@ def test_debug(mock_run, request):
 
 
 @patch.object(App, "run")
-def test_exception(mock_run):
-    """Test the output of an exception (with a hint)."""
-    runner = CliRunner(mix_stderr=False)
+def test_handled_exception_with_hint(mock_run):
+    """Test the output of a handled exception (with a hint)."""
+    runner = CliRunner()
     mock_run.side_effect = SlowStartRewatchException(
         message="The cute app is pouting.",
         hint="Give her headpats.",
@@ -65,5 +65,30 @@ def test_exception(mock_run):
 
     cli_result = runner.invoke(main)
     assert cli_result.exit_code == 1
-    assert str(cli_result.exception) == "The cute app is pouting."
-    assert cli_result.exception.hint == "Give her headpats."
+    assert "pouting" in cli_result.output
+    assert "headpats" in cli_result.output
+
+
+@patch.object(App, "run")
+def test_handled_exception_without_hint(mock_run):
+    """Test the output of an exception without a hint."""
+    runner = CliRunner()
+    mock_run.side_effect = SlowStartRewatchException(
+        message="The cute app is unreachable.",
+    )
+
+    cli_result = runner.invoke(main)
+    assert cli_result.exit_code == 1
+    assert "unreachable" in cli_result.output
+
+
+@patch.object(App, "run")
+def test_unhandled_exception(mock_run):
+    """Test the output of an unhandled exception."""
+    runner = CliRunner()
+    mock_run.side_effect = Exception("Reddit API is pouting.")
+
+    cli_result = runner.invoke(main)
+    assert cli_result.exit_code == 1
+    assert "unexpected error" in cli_result.output
+    assert "pouting" in cli_result.output
