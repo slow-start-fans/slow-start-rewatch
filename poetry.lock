@@ -7,6 +7,25 @@ python-versions = "*"
 version = "0.7.12"
 
 [[package]]
+category = "main"
+description = "Library provides common APIs to load and dump configuration files in various formats"
+name = "anyconfig"
+optional = false
+python-versions = "*"
+version = "0.9.11"
+
+[package.dependencies]
+setuptools = "*"
+
+[package.extras]
+devel = ["coveralls", "flake8 (<3.5.0)", "mock", "nose", "pylint", "pycodestyle (<2.4.0)"]
+query = ["jmespath"]
+schema = ["jsonschema"]
+template = ["jinja2"]
+toml = ["toml"]
+yaml = ["pyyaml"]
+
+[[package]]
 category = "dev"
 description = "Read/rewrite/write Python ASTs"
 name = "astor"
@@ -161,6 +180,17 @@ name = "docutils"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 version = "0.16"
+
+[[package]]
+category = "main"
+description = "Dictionary wrapper for quick access to deeply nested keys."
+name = "dotty-dict"
+optional = false
+python-versions = "*"
+version = "1.2.1"
+
+[package.dependencies]
+setuptools_scm = "*"
 
 [[package]]
 category = "dev"
@@ -856,6 +886,20 @@ setuptools = "*"
 
 [[package]]
 category = "main"
+description = "the blessed package to manage your versions by scm tags"
+name = "setuptools-scm"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+version = "4.1.1"
+
+[package.dependencies]
+setuptools = "*"
+
+[package.extras]
+toml = ["toml"]
+
+[[package]]
+category = "main"
 description = "Python 2 and 3 compatibility utilities"
 name = "six"
 optional = false
@@ -1152,13 +1196,17 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "f318631208de10541b50076f98c7f205b65d07ad7731db96bdbba55740044a32"
+content-hash = "8da7519d0f1a3cee5c478cffd685afa11fb8a9ed623ee8669ba784b703116b16"
 python-versions = "^3.6"
 
 [metadata.files]
 alabaster = [
     {file = "alabaster-0.7.12-py2.py3-none-any.whl", hash = "sha256:446438bdcca0e05bd45ea2de1668c1d9b032e1a9154c2c259092d77031ddd359"},
     {file = "alabaster-0.7.12.tar.gz", hash = "sha256:a661d72d58e6ea8a57f7a86e37d86716863ee5e92788398526d58b26a4e4dc02"},
+]
+anyconfig = [
+    {file = "anyconfig-0.9.11-py2.py3-none-any.whl", hash = "sha256:e8594bd9898954538ed1370bd0a5dbded9e207548f933bbcd4dac5f48deb6a38"},
+    {file = "anyconfig-0.9.11.tar.gz", hash = "sha256:8888130cde5461cb39379afdd1d09b1b1342356210f0a6743a4b60f9973226f8"},
 ]
 astor = [
     {file = "astor-0.8.1-py2.py3-none-any.whl", hash = "sha256:070a54e890cefb5b3739d19f30f5a5ec840ffc9c50ffa7d23cc9fc1a38ebbfc5"},
@@ -1247,6 +1295,9 @@ doc8 = [
 docutils = [
     {file = "docutils-0.16-py2.py3-none-any.whl", hash = "sha256:0c5b78adfbf7762415433f5515cd5c9e762339e23369dbe8000d84a4bf4ab3af"},
     {file = "docutils-0.16.tar.gz", hash = "sha256:c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc"},
+]
+dotty-dict = [
+    {file = "dotty_dict-1.2.1.tar.gz", hash = "sha256:0b6f1ebc26a442f4cb1f963dbda7f5a56a5993a7c1311b1feca77e0bfcc1a13b"},
 ]
 dparse = [
     {file = "dparse-0.5.1-py3-none-any.whl", hash = "sha256:e953a25e44ebb60a5c6efc2add4420c177f1d8404509da88da9729202f306994"},
@@ -1539,6 +1590,16 @@ restructuredtext-lint = [
 safety = [
     {file = "safety-1.9.0-py2.py3-none-any.whl", hash = "sha256:86c1c4a031fe35bd624fce143fbe642a0234d29f7cbf7a9aa269f244a955b087"},
     {file = "safety-1.9.0.tar.gz", hash = "sha256:23bf20690d4400edc795836b0c983c2b4cbbb922233108ff925b7dd7750f00c9"},
+]
+setuptools-scm = [
+    {file = "setuptools_scm-4.1.1-py2.7.egg", hash = "sha256:25484c46873f35ee5715cc0861c93a37fa4ee9885c6384b284927e40f657d220"},
+    {file = "setuptools_scm-4.1.1-py2.py3-none-any.whl", hash = "sha256:a2c0f4e51b3d7fe18303375fff582ca4d8450d4e153e22ef01c71ee3403d93d8"},
+    {file = "setuptools_scm-4.1.1-py3.5.egg", hash = "sha256:5e1c7d6cbad00458a6e3d32426203147e072bf49eff1cab426efb3d4d754bdc6"},
+    {file = "setuptools_scm-4.1.1-py3.6.egg", hash = "sha256:b485b8b8b05fa119c8b67ad3c23e47ee7424fd81a292234e201c5a99830b9017"},
+    {file = "setuptools_scm-4.1.1-py3.7.egg", hash = "sha256:ae4c33ff8f1ab4eca2dd7e7f7ff8b3f765766230fe13a1d23c41ca976a47b3bc"},
+    {file = "setuptools_scm-4.1.1-py3.8.egg", hash = "sha256:3ae7a2c889a33c72181b683e3cfd570e00a18b57169139e4ef77a37482c98bb3"},
+    {file = "setuptools_scm-4.1.1-py3.9.egg", hash = "sha256:21a5f539d42feb1891e05d9fc03099338e5ca409b75c70b2274bf0f56efe36d1"},
+    {file = "setuptools_scm-4.1.1.tar.gz", hash = "sha256:65005ecfde4b2e45370cbc118ff5bbfa2740e7c7ed85c7da574e6fd244c4c7b8"},
 ]
 six = [
     {file = "six-1.14.0-py2.py3-none-any.whl", hash = "sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c"},
