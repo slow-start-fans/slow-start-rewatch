@@ -7,6 +7,7 @@ from click.testing import CliRunner
 
 from slow_start_rewatch.__main__ import main
 from slow_start_rewatch.app import App
+from slow_start_rewatch.exceptions import SlowStartRewatchException
 
 
 @patch.object(App, "run")
@@ -51,3 +52,18 @@ def test_debug(mock_run, request):
 
     assert logger.getEffectiveLevel() == logging.DEBUG
     assert cli_result.exit_code == 0
+
+
+@patch.object(App, "run")
+def test_exception(mock_run):
+    """Test the output of an exception (with a hint)."""
+    runner = CliRunner(mix_stderr=False)
+    mock_run.side_effect = SlowStartRewatchException(
+        message="The cute app is pouting.",
+        hint="Give her headpats.",
+    )
+
+    cli_result = runner.invoke(main)
+    assert cli_result.exit_code == 1
+    assert str(cli_result.exception) == "The cute app is pouting."
+    assert cli_result.exception.hint == "Give her headpats."

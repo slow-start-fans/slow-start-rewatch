@@ -10,6 +10,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add class `Config` that provides configuration for the Slow Start Rewatch
 - Add a substitution of placeholders to the `Config` class
 - Add class `App` - the main application class
+- Add class `SlowStartRewatchException` - the base class for exceptions
 
 
 ## Version 0.1.0
