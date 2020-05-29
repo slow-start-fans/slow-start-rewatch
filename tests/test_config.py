@@ -28,6 +28,8 @@ def test_custom_config():
     assert config["heartwarming_anime.name"] == "Slow Start"
     assert "cute_girls" in config
     assert "pesky_boys" not in config
+    assert os.path.expanduser("~") in config["data_dir"]
+    assert "{0}slow_start".format(os.path.sep) in config["data_dir"]
 
 
 def test_config_interface():
