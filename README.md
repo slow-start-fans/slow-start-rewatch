@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/happy_shion.gif" width="384" height="360" />
+  <img src="https://raw.githubusercontent.com/slow-start-fans/slow-start-rewatch/master/assets/happy_shion.gif" width="384" height="360" />
 </p>
 
 
