@@ -3,7 +3,7 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
-## Version 0.1.3 (unreleased)
+## Version 0.1.3
 
 - Add class `Timer` - responsible for waiting until the scheduled time
 - Add the `Timer` to the `App`
