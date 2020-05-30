@@ -47,6 +47,7 @@ class Config(object):
         }
         keys = [
             "data_dir",
+            "scheduled_post_file",
         ]
 
         log.debug("config_substitute", mapping=mapping, keys=keys)
