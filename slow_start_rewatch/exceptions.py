@@ -39,3 +39,7 @@ class Abort(SlowStartRewatchException):
         """Initialize Abort."""
         message = "The program has been aborted."
         super().__init__(message, exit_code=EXIT_CODE_SCRIPT_ABORTED)
+
+
+class AuthorizationError(SlowStartRewatchException):
+    """Indicates an error during the authorization."""

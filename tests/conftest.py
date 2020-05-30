@@ -18,6 +18,10 @@ from slow_start_rewatch.config import Config
 from slow_start_rewatch.post import Post
 
 TEST_ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+HTTP_SERVER_HOSTNAME = "127.0.0.1"
+HTTP_SERVER_PORT = 65000
+
+OAUTH_CODE = "anime_girls_are_cute"
 
 
 class MockConfig(Config):
