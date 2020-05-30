@@ -35,7 +35,11 @@ def test_loading_invalid_file(scheduler_config_invalid):
 
 
 def test_loading_nonexistent_file(scheduler_config_missing):
-    """Test loading the Post when the source file is missing."""
+    """
+    Test loading the Post when the source file is missing.
+
+    When the source file is missing Scheduler should create a sample file.
+    """
     scheduler = Scheduler(scheduler_config_missing)
 
     scheduled_post_file = scheduler_config_missing["scheduled_post_file"]
@@ -44,6 +48,12 @@ def test_loading_nonexistent_file(scheduler_config_missing):
 
     with pytest.raises(MissingSchedule):
         scheduler.load("cute_tester")
+
+    with open(scheduled_post_file, "r") as sample_post_file:
+        yaml_content = sample_post_file.read()
+
+    assert "cute_tester" in yaml_content
+    assert "${" not in yaml_content
 
 
 @pytest.fixture()
