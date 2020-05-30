@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import math
 import time
 from datetime import datetime
 from typing import Iterator, Optional
@@ -64,6 +65,9 @@ class Timer(object):
             self.ticks(),
             label="Waiting to submit the post (press Ctrl+C to quit):",
             fill_char=click.style("#", fg="bright_magenta"),
+            item_show_func=self.time_left,
+            show_eta=False,
+            show_percent=False,
         ) as progressbar:
             for tick in progressbar:
                 current_timestamp = datetime.now().timestamp() * 1000
@@ -94,3 +98,17 @@ class Timer(object):
             start_timestamp,
             -self.refresh_interval,
         ))
+
+    def time_left(self, tick: Optional[int]) -> str:
+        """Render remaining time."""
+        if self.target_time is None:
+            raise AttributeError(
+                "'target_time' must be set to render remaning time.",
+            )
+
+        if tick is None:
+            return ""
+
+        current_timestamp = datetime.fromtimestamp(math.floor(tick / 1000))
+
+        return str(self.target_time - current_timestamp)

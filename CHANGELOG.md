@@ -7,6 +7,7 @@ We follow [Semantic Versions](https://semver.org/).
 
 - Add class `Timer` - responsible for waiting until the scheduled time
 - Add the `Timer` to the `App`
+- Add rendering of the remaining time during the countdown
 
 
 ## Version 0.1.2
