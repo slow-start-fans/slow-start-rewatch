@@ -8,6 +8,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add `Jinja` templates with cute GIFs - used for the OAuth callback
 - Add `flask` to dependencies
 - Add the `http_server` module - handling the OAuth callback
+- Add `praw` to dependencies
 
 
 ## Version 0.1.3
