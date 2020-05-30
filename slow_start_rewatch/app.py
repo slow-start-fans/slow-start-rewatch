@@ -5,6 +5,7 @@ from datetime import datetime
 import click
 
 from slow_start_rewatch.config import Config
+from slow_start_rewatch.reddit.reddit_cutifier import RedditCutifier
 from slow_start_rewatch.scheduler import Scheduler
 from slow_start_rewatch.timer import Timer
 
@@ -14,7 +15,7 @@ class App(object):
 
     def __init__(self, config: Config) -> None:
         """Initialize App."""
-        self.config = config
+        self.reddit_cutifier = RedditCutifier(config)
         self.timer = Timer(config)
         self.scheduler = Scheduler(config)
 
@@ -27,9 +28,17 @@ class App(object):
         """
         Make the preparations for the main run.
 
-        - Load the scheduled Post.
+        1. Authorize as a Reddit user.
+
+        2. Load the scheduled Post.
         """
-        self.scheduler.load(self.config["username"])
+        self.reddit_cutifier.authorize()
+
+        click.echo("Logged in as: {0}".format(
+            click.style(self.reddit_cutifier.username, fg="bright_blue"),
+        ))
+
+        self.scheduler.load(self.reddit_cutifier.username)
 
     def start(self) -> None:
         """

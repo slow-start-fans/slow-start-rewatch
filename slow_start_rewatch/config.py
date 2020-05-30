@@ -8,6 +8,8 @@ import anyconfig
 from dotty_dict import dotty
 from structlog import get_logger
 
+from slow_start_rewatch.version import version
+
 DEFAULT_CONFIG_FILENAME = "config_default.yml"
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 HOME_DIR = os.path.expanduser("~")
@@ -47,10 +49,12 @@ class Config(object):
         mapping = {
             "home_dir": HOME_DIR,
             "ps": os.path.sep,
+            "version": version(),
         }
         keys = [
             "data_dir",
             "scheduled_post_file",
+            "reddit.user_agent",
         ]
 
         log.debug("config_substitute", mapping=mapping, keys=keys)

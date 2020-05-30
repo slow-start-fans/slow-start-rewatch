@@ -5,8 +5,19 @@ data_dir: "${home_dir}${ps}slow_start_rewatch"
 # The YAML file with the data about a scheduled post:
 scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
 
-# Temporary configuration of the Reddit username:
-username: cute_tester
+# Reddit OAuth2 settings:
+reddit:
+  client_id: DGWt4p3WhWiQWg
+  client_secret: # Left empty by default
+  user_agent: Slow Start Rewatch Client v${version}
+  # Access permissions required by the program:
+  oauth_scope:
+    - identity
+    - read
+    - submit
+    - edit
+    - wikiedit
+    - flair
 
 # Local HTTP server used for the OAuth2 callback:
 http_server:

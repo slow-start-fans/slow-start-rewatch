@@ -19,6 +19,7 @@ def test_default_config():
     config = Config()
 
     assert "data_dir" in config
+    assert "Slow Start" in config["reddit.user_agent"]
 
 
 def test_custom_config():

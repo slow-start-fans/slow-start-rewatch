@@ -7,11 +7,12 @@ data_dir: "${home_dir}${ps}slow_start_rewatch"
 
 scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
 
-username: cute_tester
+reddit:
+  user_agent: Slow Start Rewatch Client v${version}
 
 http_server:
   hostname: "127.0.0.1"
   port: 65000
 
 timer:
-  refresh_interval: 200 # milliseconds
+refresh_interval: 200 # milliseconds
