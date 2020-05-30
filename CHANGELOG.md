@@ -11,6 +11,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add `praw` to dependencies
 - Add the `OAuthHelper` class - providing the methods for the Reddit authorization
 - Add the `RedditCutifier` class - making Reddit a cuter place
+- Add Reddit authorization via the `RedditCutifier` to the `App`
 
 
 ## Version 0.1.3

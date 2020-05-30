@@ -7,7 +7,7 @@ from click.testing import CliRunner
 
 from slow_start_rewatch.__main__ import main
 from slow_start_rewatch.app import App
-from slow_start_rewatch.exceptions import SlowStartRewatchException
+from slow_start_rewatch.exceptions import Abort, SlowStartRewatchException
 
 
 @patch.object(App, "run")
@@ -70,16 +70,14 @@ def test_handled_exception_with_hint(mock_run):
 
 
 @patch.object(App, "run")
-def test_handled_exception_without_hint(mock_run):
-    """Test the output of an exception without a hint."""
+def test_handled_abort(mock_run):
+    """Test the output of an aborted run (an exception without a hint)."""
     runner = CliRunner()
-    mock_run.side_effect = SlowStartRewatchException(
-        message="The cute app is unreachable.",
-    )
+    mock_run.side_effect = Abort
 
     cli_result = runner.invoke(main)
-    assert cli_result.exit_code == 1
-    assert "unreachable" in cli_result.output
+    assert cli_result.exit_code == 130
+    assert "aborted" in cli_result.output
 
 
 @patch.object(App, "run")
