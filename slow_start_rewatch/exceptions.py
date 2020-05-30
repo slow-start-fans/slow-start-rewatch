@@ -2,6 +2,8 @@
 
 from typing import Optional
 
+EXIT_CODE_SCRIPT_ABORTED = 130
+
 
 class SlowStartRewatchException(Exception):
     """An exception that slow_start_rewatch can handle."""
@@ -24,3 +26,16 @@ class InvalidSchedule(SlowStartRewatchException):
 
 class MissingSchedule(SlowStartRewatchException):
     """Indicates that data about scheduled posts are missing."""
+
+
+class EmptySchedule(SlowStartRewatchException):
+    """Indicates there is no scheduled post in the future."""
+
+
+class Abort(SlowStartRewatchException):
+    """An internal signal that Ctrl+C has been pressed."""
+
+    def __init__(self):
+        """Initialize Abort."""
+        message = "The program has been aborted."
+        super().__init__(message, exit_code=EXIT_CODE_SCRIPT_ABORTED)

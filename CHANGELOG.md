@@ -3,6 +3,11 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
+## Version 0.1.3 (unreleased)
+
+- Add class `Timer` - responsible for waiting until the scheduled time
+
+
 ## Version 0.1.2
 
 - Add class `Post` - representing the Reddit post
