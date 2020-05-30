@@ -16,3 +16,11 @@ class SlowStartRewatchException(Exception):
     def __str__(self):
         """Return string representation of the exception."""
         return self.message
+
+
+class InvalidSchedule(SlowStartRewatchException):
+    """Indicates an error in the data about scheduled posts."""
+
+
+class MissingSchedule(SlowStartRewatchException):
+    """Indicates that data about scheduled posts are missing."""
