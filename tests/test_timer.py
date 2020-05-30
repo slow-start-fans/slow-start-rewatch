@@ -98,6 +98,35 @@ def test_ticks(timer_config):
     assert generated_ticks == expected_ticks
 
 
+@pytest.mark.parametrize(("tick_datetime", "expected_time_left"), [
+    (datetime(2018, 1, 6, 10, 59, 59, 100 * 1000), "1:00:01"),
+    (datetime(2018, 1, 6, 11, 59, 59, 900 * 1000), "0:00:01"),
+    (datetime(2018, 1, 6, 12), "0:00:00"),
+    (None, ""),
+],
+)
+def test_time_left(tick_datetime, expected_time_left, timer_config):
+    """Test that the remaining time is rendered correctly."""
+    timer = Timer(
+        config=timer_config,
+        target_time=datetime(2018, 1, 6, 12, 0, 0),
+    )
+
+    tick = int(tick_datetime.timestamp() * 1000) if tick_datetime else None
+
+    time_left = timer.time_left(tick)
+
+    assert time_left == expected_time_left
+
+
+def test_time_left_invalid_call(timer_config):
+    """Test calling :meth:`Timer.time_left()` without required attributes."""
+    timer = Timer(timer_config)
+
+    with pytest.raises(AttributeError):
+        timer.time_left(1000)
+
+
 @pytest.fixture()
 def timer_config():
     """Return mock Config for testing Timer."""
