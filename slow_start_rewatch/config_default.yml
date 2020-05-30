@@ -1,2 +1,9 @@
-# Directory for locally stored data:
+# Directory for locally stored data. The {home_dir} placeholder is replaced by
+# the home directory.
 data_dir: "${home_dir}${ps}slow_start_rewatch"
+
+# The YAML file with the data about a scheduled post:
+scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
+
+# Temporary configuration of the Reddit username:
+username: cute_tester
