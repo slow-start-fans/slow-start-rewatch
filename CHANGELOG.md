@@ -3,6 +3,11 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
+## Version 0.1.2 (unreleased)
+
+- Add class `Post` - representing the Reddit post
+
+
 ## Version 0.1.1
 
 - Configure logging with `structlog`
