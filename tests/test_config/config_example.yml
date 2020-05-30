@@ -8,3 +8,6 @@ data_dir: "${home_dir}${ps}slow_start_rewatch"
 scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
 
 username: cute_tester
+
+timer:
+  refresh_interval: 200 # milliseconds
