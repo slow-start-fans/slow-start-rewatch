@@ -3,7 +3,7 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
-## Version 0.1.4 (unreleased)
+## Version 0.1.4
 
 - Add `Jinja` templates with cute GIFs - used for the OAuth callback
 - Add `flask` to dependencies
