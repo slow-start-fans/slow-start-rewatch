@@ -20,7 +20,7 @@ Provide a command-line utility for hosting an awesome Slow Start Rewatch.
 
 ## Features
 
-- Schedule a submission of Reddit posts (TBD)
+- Schedule a submission of Reddit posts
 - Templates-based posts
 - Reddit authorization via OAuth2 using a local HTTP server with cute GIFs (TBD)
 - Fully typed with annotations and checked with mypy, [PEP561 compatible](https://www.python.org/dev/peps/pep-0561/)
