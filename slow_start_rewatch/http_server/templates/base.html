@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Slow Start Rewatch &ndash; Make cute things happen!</title>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <h5 class="my-0 mr-md-auto font-weight-normal">Slow Start Rewatch &ndash; <em>Make cute things happen!</em></h5>
+    <a class="btn btn-outline-primary" href="https://old.reddit.com">Back to Reddit</a>
+  </div>
+
+  {% block body %}{% endblock %}
+
+  <script type="text/javascript">
+    const videoElement = document.getElementById("gif");
+    let startPlayPromise = videoElement.play();
+
+    if (startPlayPromise !== undefined) {
+      startPlayPromise.catch(error => {
+        const newElement = document.createElement('img');
+        newElement.src = videoElement.dataset.gifSrc;
+        newElement.id = videoElement.id
+        videoElement.parentNode.replaceChild(newElement, videoElement);
+      });
+    }
+  </script>
+</body>
+
+</html>

@@ -3,6 +3,11 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
+## Version 0.1.4 (unreleased)
+
+- Add `Jinja` templates with cute GIFs - used for the OAuth callback
+
+
 ## Version 0.1.3
 
 - Add class `Timer` - responsible for waiting until the scheduled time
