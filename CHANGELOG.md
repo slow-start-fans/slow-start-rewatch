@@ -6,6 +6,7 @@ We follow [Semantic Versions](https://semver.org/).
 ## Version 0.1.2 (unreleased)
 
 - Add class `Post` - representing the Reddit post
+- Add class `Scheduler` - managing data about scheduled posts
 
 
 ## Version 0.1.1
