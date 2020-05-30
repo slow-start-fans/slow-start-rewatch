@@ -10,6 +10,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add the `http_server` module - handling the OAuth callback
 - Add `praw` to dependencies
 - Add the `OAuthHelper` class - providing the methods for the Reddit authorization
+- Add the `RedditCutifier` class - making Reddit a cuter place
 
 
 ## Version 0.1.3
