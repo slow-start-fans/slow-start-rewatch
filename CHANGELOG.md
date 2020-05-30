@@ -12,6 +12,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add class `App` - the main application class
 - Add class `SlowStartRewatchException` - the base class for exceptions
 - Set up exception handling
+- Add `prepare` and `start` blocks to `App`
 
 
 ## Version 0.1.0

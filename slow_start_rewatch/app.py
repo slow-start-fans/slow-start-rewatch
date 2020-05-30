@@ -14,4 +14,13 @@ class App(object):
 
     def run(self) -> None:
         """Runs the application."""
+        self.prepare()
+        self.start()
+
+    def prepare(self) -> None:
+        """Make the preparations for the main run."""
+        click.echo("Preparing the Slow Start Rewatch...")
+
+    def start(self) -> None:
+        """Start the main run."""
         click.echo("Starting the Slow Start Rewatch...")
