@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from praw import Reddit
+from praw.reddit import Submission
+from prawcore.exceptions import PrawcoreException
 from structlog import get_logger
 
 from slow_start_rewatch.config import Config
+from slow_start_rewatch.exceptions import RedditError
+from slow_start_rewatch.post import Post
 from slow_start_rewatch.reddit.oauth_helper import OAuthHelper
 
 log = get_logger()
@@ -56,3 +60,24 @@ class RedditCutifier(object):
     def authorize(self) -> None:
         """Authorize user using the :class:`.OAuthHelper`."""
         self.oauth_helper.authorize()
+
+    def submit_post(self, post: Post) -> str:
+        """Submit the post to Reddit."""
+        log.info("post_submit", post=str(post))
+        try:
+            submission: Submission = self.reddit.subreddit(
+                post.subreddit,
+            ).submit(
+                title=post.title,
+                selftext=post.body,
+            )
+        except PrawcoreException as exception:
+            log.exception("post_submit_error", exception=exception)
+            raise RedditError(
+                "Failed to submit the post.",
+            ) from exception
+
+        permalink = submission.permalink
+        log.debug("post_submit_result", permalink=permalink)
+
+        return permalink
