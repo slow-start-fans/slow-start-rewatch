@@ -9,6 +9,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add `flask` to dependencies
 - Add the `http_server` module - handling the OAuth callback
 - Add `praw` to dependencies
+- Add the `OAuthHelper` class - providing the methods for the Reddit authorization
 
 
 ## Version 0.1.3

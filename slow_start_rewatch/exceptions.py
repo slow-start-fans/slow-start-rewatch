@@ -43,3 +43,7 @@ class Abort(SlowStartRewatchException):
 
 class AuthorizationError(SlowStartRewatchException):
     """Indicates an error during the authorization."""
+
+
+class RedditError(SlowStartRewatchException):
+    """Indicates error when accessing Reddit API."""
