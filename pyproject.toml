@@ -37,6 +37,7 @@ colorama = "^0.4.3"
 anyconfig = "^0.9.11"
 dotty-dict = "^1.2.1"
 flask = "^1.1.2"
+praw = "^7.0.0"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.770"
