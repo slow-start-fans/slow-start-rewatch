@@ -10,6 +10,7 @@ It may be also used for extending doctest's context:
 
 import os
 from datetime import datetime
+from unittest import mock
 
 import pytest
 from dotty_dict import dotty
@@ -63,3 +64,9 @@ def post():
         title="Slow Start - Episode 1 Discussion",
         body=body,
     )
+
+
+@pytest.fixture()
+def reddit():
+    """Return mock Reddit class."""
+    return mock.Mock()

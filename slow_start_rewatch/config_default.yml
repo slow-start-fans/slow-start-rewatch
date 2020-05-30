@@ -8,6 +8,11 @@ scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
 # Temporary configuration of the Reddit username:
 username: cute_tester
 
+# Local HTTP server used for the OAuth2 callback:
+http_server:
+  hostname: "127.0.0.1"
+  port: 65000
+
 # Timer configuration:
 timer:
   refresh_interval: 200 # milliseconds
