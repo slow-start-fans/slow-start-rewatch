@@ -23,6 +23,7 @@ HTTP_SERVER_HOSTNAME = "127.0.0.1"
 HTTP_SERVER_PORT = 65000
 
 OAUTH_CODE = "anime_girls_are_cute"
+REFRESH_TOKEN = "moe_moe_kyun"  # noqa: S105
 
 
 class MockConfig(Config):
@@ -31,6 +32,7 @@ class MockConfig(Config):
     def __init__(self, config_data=None) -> None:
         """Initialize MockConfig."""
         self.config = dotty(config_data)
+        self.refresh_token = None
 
 
 @pytest.fixture()
@@ -69,4 +71,7 @@ def post():
 @pytest.fixture()
 def reddit():
     """Return mock Reddit class."""
-    return mock.Mock()
+    mock_reddit = mock.Mock()
+    mock_reddit.user.me.return_value.name = "cute_tester"
+
+    return mock_reddit

@@ -2,6 +2,7 @@
 
 import os
 from string import Template
+from typing import Optional
 
 import anyconfig
 from dotty_dict import dotty
@@ -26,6 +27,8 @@ class Config(object):
         self.config = dotty(anyconfig.load(config_list))
 
         self._substitute_placeholders()
+
+        self.refresh_token: Optional[str] = None
 
     def __getitem__(self, key):
         """Return the config item."""
