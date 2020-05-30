@@ -3,7 +3,9 @@
 from unittest.mock import call, patch
 
 import pytest
+from prawcore.exceptions import PrawcoreException
 
+from slow_start_rewatch.exceptions import RedditError
 from slow_start_rewatch.reddit.oauth_helper import OAuthHelper
 from slow_start_rewatch.reddit.reddit_cutifier import RedditCutifier
 from tests.conftest import (
@@ -70,6 +72,36 @@ def test_username(
 
     with pytest.raises(AttributeError):
         assert reddit_cutifier.username
+
+
+@patch.object(OAuthHelper, "authorize")
+@patch("praw.Reddit")
+def test_submit_post(
+    mock_reddit,
+    mock_oauth_helper_authorize,
+    reddit_cutifier_config,
+    reddit,
+    post,
+):
+    """
+    Test that :meth:`RedditCutifier.submit_post()` uses PRAW methods correctly.
+
+    1. Test a successful post submission.
+
+    2. Test an error handling during the submission.
+    """
+    reddit_cutifier = RedditCutifier(reddit_cutifier_config)
+    reddit_cutifier.reddit = reddit
+
+    permalink = reddit_cutifier.submit_post(post)
+
+    assert permalink == "slow_start_post_link"
+    assert reddit.subreddit.return_value.submit.call_count == 1
+
+    reddit.subreddit.return_value.submit.side_effect = PrawcoreException
+
+    with pytest.raises(RedditError):
+        reddit_cutifier.submit_post(post)
 
 
 @pytest.fixture()
