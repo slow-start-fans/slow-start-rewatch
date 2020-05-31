@@ -46,7 +46,7 @@ class App(object):
 
         1. Wait until the scheduled time.
 
-        2. Proceed with the Post submission.
+        2. Submit the Post.
         """
         post = self.scheduler.scheduled_post
 
@@ -57,8 +57,9 @@ class App(object):
 
         self.timer.wait(post.submit_at)
 
-        click.echo("{0}: A post to be submitted: {1} - {2}".format(
+        click.echo("{0}: Submitting post: {1} - {2}".format(
             datetime.now(),
             post.subreddit,
             post.title,
         ))
+        self.reddit_cutifier.submit_post(post)
