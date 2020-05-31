@@ -6,6 +6,7 @@ We follow [Semantic Versions](https://semver.org/).
 ## Version 0.1.5 (unreleased)
 
 - Implement the post submission to the `RedditCutifier`
+- Add the post submission via the `RedditCutifier` to the `App`
 
 
 ## Version 0.1.4
