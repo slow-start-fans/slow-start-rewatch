@@ -8,6 +8,7 @@ import anyconfig
 from dotty_dict import dotty
 from structlog import get_logger
 
+from slow_start_rewatch.config_storage import ConfigStorage
 from slow_start_rewatch.version import version
 
 DEFAULT_CONFIG_FILENAME = "config_default.yml"
@@ -30,7 +31,9 @@ class Config(object):
 
         self._substitute_placeholders()
 
-        self.refresh_token: Optional[str] = None
+        self.storage = ConfigStorage(self.config["refresh_token_file"])
+
+        self._refresh_token: Optional[str] = None
 
     def __getitem__(self, key):
         """Return the config item."""
@@ -44,6 +47,32 @@ class Config(object):
         """Return true if an item exists in the config."""
         return key in self.config
 
+    @property
+    def refresh_token(self) -> Optional[str]:
+        """
+        Get the refresh token.
+
+        Try to load the token if not set.
+        """
+        if not self._refresh_token:
+            self._refresh_token = self.storage.load_refresh_token()
+
+        return self._refresh_token
+
+    @refresh_token.setter
+    def refresh_token(self, refresh_token: Optional[str]) -> None:
+        """
+        Set and save the refresh token.
+
+        If the value is set to None delete the stored token.
+        """
+        if refresh_token:
+            self._refresh_token = refresh_token.strip()
+            self.storage.save_refresh_token(self._refresh_token)
+        else:
+            self._refresh_token = None
+            self.storage.delete_refresh_token()
+
     def _substitute_placeholders(self) -> None:
         """Substitute the placeholders in the config."""
         mapping = {
@@ -54,6 +83,7 @@ class Config(object):
         keys = [
             "data_dir",
             "scheduled_post_file",
+            "refresh_token_file",
             "reddit.user_agent",
         ]
 

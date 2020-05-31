@@ -5,6 +5,8 @@ cute_girls: True
 
 data_dir: "${home_dir}${ps}slow_start_rewatch"
 
+refresh_token_file: "${home_dir}${ps}slow_start_rewatch${ps}reddit_token.dat"
+
 scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
 
 reddit:

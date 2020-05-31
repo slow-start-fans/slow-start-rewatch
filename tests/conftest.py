@@ -10,6 +10,7 @@ It may be also used for extending doctest's context:
 
 import os
 from datetime import datetime
+from typing import Optional
 from unittest import mock
 
 import pytest
@@ -27,12 +28,26 @@ REFRESH_TOKEN = "moe_moe_kyun"  # noqa: S105
 
 
 class MockConfig(Config):
-    """Simplified version of the Config class."""
+    """
+    Simplified version of the Config class.
+
+    The refresh token isn't stored permanently.
+    """
 
     def __init__(self, config_data=None) -> None:
         """Initialize MockConfig."""
         self.config = dotty(config_data)
-        self.refresh_token = None
+        self._refresh_token = None
+
+    @property
+    def refresh_token(self) -> Optional[str]:
+        """Get the refresh token."""
+        return self._refresh_token
+
+    @refresh_token.setter
+    def refresh_token(self, refresh_token) -> None:
+        """Set the refresh token."""
+        self._refresh_token = refresh_token
 
 
 @pytest.fixture()

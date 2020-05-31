@@ -5,6 +5,9 @@ data_dir: "${home_dir}${ps}slow_start_rewatch"
 # The YAML file with the data about a scheduled post:
 scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
 
+# The file where the refresh token is stored:
+refresh_token_file: "${home_dir}${ps}slow_start_rewatch${ps}reddit_token.dat"
+
 # Reddit OAuth2 settings:
 reddit:
   client_id: DGWt4p3WhWiQWg
