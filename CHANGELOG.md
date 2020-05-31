@@ -7,6 +7,7 @@ We follow [Semantic Versions](https://semver.org/).
 
 - Implement the post submission to the `RedditCutifier`
 - Add the post submission via the `RedditCutifier` to the `App`
+- Add the `ConfigStorage` class - storing the refresh token
 
 
 ## Version 0.1.4
