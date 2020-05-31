@@ -47,3 +47,16 @@ class AuthorizationError(SlowStartRewatchException):
 
 class RedditError(SlowStartRewatchException):
     """Indicates error when accessing Reddit API."""
+
+
+class InvalidRefreshToken(SlowStartRewatchException):
+    """Indicates the refresh token is corrupt and cannot be used to log in."""
+
+
+class MissingRefreshToken(SlowStartRewatchException):
+    """Indicates the saved refresh token was not found."""
+
+    def __init__(self):
+        """Initialize MissingRefreshToken."""
+        message = "Refresh token not found."
+        super().__init__(message)

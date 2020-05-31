@@ -9,6 +9,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add the post submission via the `RedditCutifier` to the `App`
 - Add the `ConfigStorage` class - storing the refresh token
 - Implement the storing of the refresh token to the `Config`
+- Add the authorization with the refresh token to the `OAuthHelper`
 
 
 ## Version 0.1.4
