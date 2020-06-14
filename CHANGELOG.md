@@ -7,6 +7,7 @@ We follow [Semantic Versions](https://semver.org/).
 
 - Refactor the `Scheduler` to improve the exception handling when loading the scheduled post
 - Move the `EmptySchedule` checking from the `Timer` to the `Scheduler`
+- Add the `RedditHelper` class - providing the Reddit's API methods unsupported by `PRAW`
 
 
 ## Version 0.1.5
