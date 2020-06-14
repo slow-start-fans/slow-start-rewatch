@@ -4,6 +4,8 @@ subreddit: anime
 
 title: "Slow Start - Episode 1 Discussion"
 
+submit_with_thumbnail: False
+
 # Removed indentation to cause YAML parsing error:
 body: |
 *Slow Start*, Episode 1: The First Butterflies
