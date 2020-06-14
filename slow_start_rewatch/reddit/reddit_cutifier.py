@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from praw import Reddit
-from praw.reddit import Submission
 from prawcore.exceptions import PrawcoreException
 from structlog import get_logger
 
@@ -9,6 +8,7 @@ from slow_start_rewatch.config import Config
 from slow_start_rewatch.exceptions import RedditError
 from slow_start_rewatch.post import Post
 from slow_start_rewatch.reddit.oauth_helper import OAuthHelper
+from slow_start_rewatch.reddit.reddit_helper import RedditHelper
 
 log = get_logger()
 
@@ -48,6 +48,7 @@ class RedditCutifier(object):
         )
 
         self.oauth_helper = OAuthHelper(config, self.reddit)
+        self.reddit_helper = RedditHelper(config, self.reddit)
 
     @property
     def username(self) -> str:
@@ -62,17 +63,30 @@ class RedditCutifier(object):
         self.oauth_helper.authorize()
 
     def submit_post(self, post: Post) -> str:
-        """Submit the post to Reddit."""
+        """
+        Submit the post to Reddit.
+
+        If the post is set to be submitted with thumbnail, submit its body in
+        the Rich Text JSON format. Otherwise submit the Markdown content using
+        regular method of `PRAW`.
+        """
         log.info("post_submit", post=str(post))
         try:
-            submission: Submission = self.reddit.subreddit(
-                post.subreddit,
-            ).submit(
-                title=post.title,
-                selftext=post.body_md,
-            )
+            if post.submit_with_thumbnail and post.body_rtjson:
+                submission = self.reddit_helper.submit_post_rtjson(
+                    subreddit=post.subreddit,
+                    title=post.title,
+                    body_rtjson=post.body_rtjson,
+                )
+            else:
+                submission = self.reddit.subreddit(
+                    post.subreddit,
+                ).submit(
+                    title=post.title,
+                    selftext=post.body_md,
+                )
         except PrawcoreException as exception:
-            log.exception("post_submit_error", exception=exception)
+            log.exception("post_submit_error")
             raise RedditError(
                 "Failed to submit the post.",
             ) from exception
