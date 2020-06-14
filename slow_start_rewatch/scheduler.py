@@ -6,7 +6,7 @@ from string import Template
 from typing import Optional
 
 import click
-from ruamel.yaml import YAML  # type: ignore
+from ruamel.yaml import YAML, YAMLError  # type: ignore
 from structlog import get_logger
 
 from slow_start_rewatch.config import ROOT_DIR, Config
@@ -53,12 +53,6 @@ class Scheduler(object):
                     self.scheduled_post_file,
                 ),
             )
-        except (KeyError, AttributeError) as error:
-            log.exception("scheduled_post_invalid")
-            raise InvalidSchedule(
-                "Failed to parse the data about the scheduled post.",
-                hint="Make sure all the fields are filled in.",
-            ) from error
 
         self.scheduled_post = post
 
@@ -78,14 +72,32 @@ class Scheduler(object):
         yaml = YAML(typ="safe")
 
         with open(path) as post_file:
-            yaml_data = yaml.load(post_file.read())
+            yaml_content = post_file.read()
 
-        return Post(
-            submit_at=yaml_data["submit_at"],
-            subreddit=yaml_data["subreddit"],
-            title=yaml_data["title"],
-            body=yaml_data["body"],
-        )
+        try:
+            yaml_data = yaml.load(yaml_content)
+        except (YAMLError, AttributeError) as yaml_error:
+            log.exception("scheduled_post_invalid")
+            raise InvalidSchedule(
+                "Failed to parse the data about the scheduled post.",
+                hint="Repair the structure of the scheduled post file.",
+            ) from yaml_error
+
+        try:
+            post = Post(
+                submit_at=yaml_data["submit_at"],
+                subreddit=yaml_data["subreddit"],
+                title=yaml_data["title"],
+                body=yaml_data["body"],
+            )
+        except (AttributeError, KeyError) as missing_data_error:
+            log.exception("scheduled_post_incomplete")
+            raise InvalidSchedule(
+                "Incomplete scheduled post data.",
+                hint="Make sure all the fields are filled in.",
+            ) from missing_data_error
+
+        return post
 
     def create_default(self, username: str) -> None:
         """
@@ -97,17 +109,19 @@ class Scheduler(object):
         with open(DEFAULT_SCHEDULED_POST_FILE) as default_post_file:
             yaml_template = Template(default_post_file.read())
 
-        sample_time = datetime.now() + timedelta(minutes=DEFAULT_DELAY)
+        post_attributes = {
+            "submit_at": (
+                datetime.now() + timedelta(minutes=DEFAULT_DELAY)
+            ).isoformat(" ", "seconds"),
+            "subreddit": "u_{0}".format(username),
+        }
 
-        yaml_content = yaml_template.substitute(
-            submit_at=sample_time.isoformat(" ", "seconds"),
-            subreddit="u_{0}".format(username),
-        )
+        yaml_content = yaml_template.substitute(post_attributes)
 
         log.info(
             "scheduled_post_create_default",
-            submit_at=sample_time.isoformat(" ", "seconds"),
-            subreddit="u_{0}".format(username),
+            submit_at=post_attributes["submit_at"],
+            subreddit=post_attributes["subreddit"],
             path=self.scheduled_post_file,
         )
 

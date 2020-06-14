@@ -3,6 +3,11 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
+## Version 0.1.6  (unreleased)
+
+- Refactor the `Scheduler` to improve the exception handling when loading the scheduled post
+
+
 ## Version 0.1.5
 
 - Implement the post submission to the `RedditCutifier`
