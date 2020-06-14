@@ -32,9 +32,8 @@ timer:
   refresh_interval: 200 # milliseconds
 
 # Image MIME types that are supported for a post thumbnail:
-  post_image_mime_types:
-    png: image/png
-    jpg: image/jpeg
-    jpeg: image/jpeg
-    gif: image/gif
-  
+post_image_mime_types:
+  png: image/png
+  jpg: image/jpeg
+  jpeg: image/jpeg
+  gif: image/gif

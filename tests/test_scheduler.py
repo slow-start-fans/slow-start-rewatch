@@ -11,8 +11,10 @@ from ruamel.yaml import YAML  # type: ignore
 
 from slow_start_rewatch.exceptions import (
     EmptySchedule,
+    ImageNotFound,
     InvalidSchedule,
     MissingSchedule,
+    PostConversionError,
 )
 from slow_start_rewatch.scheduler import Scheduler
 from tests.conftest import TEST_ROOT_DIR, MockConfig
@@ -23,15 +25,28 @@ INVALID_POST_FILENAME = "scheduled_post_invalid.yml"
 INCOMPLETE_POST_FILENAME = "scheduled_post_incomplete.yml"
 
 
+@patch.object(Scheduler, "prepare_post")
 @patch.object(Scheduler, "parse_post_from_yaml")
+@patch("slow_start_rewatch.scheduler.TextPostConverter")
 def test_load(
+    mock_text_post_converter,
     mock_parse_post_from_yaml,
+    mock_prepare_post,
     scheduler_config,
     reddit,
     post,
 ):
-    """Test loading of the scheduled post."""
+    """
+    Test loading of the scheduled post.
+
+    1. Post without the thumbnail (:meth:`Scheduler.prepare_post()` shouldn't
+       be called)
+
+    2. Post with the thumbnail (:meth:`Scheduler.prepare_post()` should be
+       called)
+    """
     post.submit_at = datetime.now() + timedelta(minutes=1)
+    post.submit_with_thumbnail = False
     mock_parse_post_from_yaml.return_value = post
 
     scheduler = Scheduler(scheduler_config, reddit)
@@ -40,12 +55,19 @@ def test_load(
 
     scheduler.load()
 
+    assert mock_prepare_post.call_count == 0
     assert scheduler.scheduled_post == post
+
+    post.submit_with_thumbnail = True
+    scheduler.load()
+    assert mock_prepare_post.call_count == 1
 
 
 @patch.object(Scheduler, "create_default")
 @patch.object(Scheduler, "parse_post_from_yaml")
+@patch("slow_start_rewatch.scheduler.TextPostConverter")
 def test_load_with_exception(
+    mock_text_post_converter,
     mock_parse_post_from_yaml,
     mock_create_default,
     scheduler_config,
@@ -68,7 +90,9 @@ def test_load_with_exception(
     assert scheduler.scheduled_post is None
 
 
+@patch("slow_start_rewatch.scheduler.TextPostConverter")
 def test_parse_post_from_yaml(
+    mock_text_post_converter,
     scheduler_config,
     reddit,
     post,
@@ -105,7 +129,9 @@ def test_parse_post_from_yaml(
     assert "Incomplete" in str(incomplete_error.value)  # noqa: WPS441
 
 
+@patch("slow_start_rewatch.scheduler.TextPostConverter")
 def test_create_default(
+    mock_text_post_converter,
     reddit,
     tmpdir,
 ):
@@ -136,6 +162,45 @@ def test_create_default(
 
     assert yaml_data["subreddit"] == "u_cute_tester"
     assert yaml_data["submit_at"] > datetime.now()
+
+
+@patch("slow_start_rewatch.scheduler.TextPostConverter")
+def test_prepare_post(
+    mock_text_post_converter,
+    scheduler_config,
+    reddit,
+    post,
+):
+    """
+    Test the preparation of the post.
+
+    1. The post is converted successfully.
+
+    2. The image is not found and :attr:`Post.submit_with_thumbnail` should be
+       set to `False`.
+
+    3. The conversion fails (an exception is raised).
+    """
+    scheduler = Scheduler(scheduler_config, reddit)
+
+    mock_text_post_converter.return_value.convert_to_rtjson.side_effect = [
+        [{"content": "Slow Start"}],
+        ImageNotFound("Image not found."),
+        PostConversionError("Post conversion failed"),
+    ]
+
+    scheduler.prepare_post(post)
+
+    assert post.body_rtjson[0]["content"] == "Slow Start"
+
+    assert post.submit_with_thumbnail
+
+    scheduler.prepare_post(post)
+
+    assert not post.submit_with_thumbnail
+
+    with pytest.raises(PostConversionError):
+        scheduler.prepare_post(post)
 
 
 @pytest.fixture()

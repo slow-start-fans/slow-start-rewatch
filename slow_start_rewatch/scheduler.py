@@ -13,10 +13,14 @@ from structlog import get_logger
 from slow_start_rewatch.config import ROOT_DIR, Config
 from slow_start_rewatch.exceptions import (
     EmptySchedule,
+    ImageNotFound,
     InvalidSchedule,
     MissingSchedule,
+    PostConversionError,
+    RedditError,
 )
 from slow_start_rewatch.post import Post
+from slow_start_rewatch.reddit.text_post_converter import TextPostConverter
 
 DEFAULT_SCHEDULED_POST_FILE = os.path.join(
     ROOT_DIR,
@@ -40,6 +44,7 @@ class Scheduler(object):
         self.scheduled_post_file: str = config["scheduled_post_file"]
         self.scheduled_post: Optional[Post] = None
         self.reddit = reddit
+        self.post_converter = TextPostConverter(config, reddit)
 
     def load(self) -> None:
         """
@@ -72,6 +77,9 @@ class Scheduler(object):
                 ),
                 hint="Please adjust the scheduled time.",
             )
+
+        if post.submit_with_thumbnail:
+            self.prepare_post(post)
 
         self.scheduled_post = post
 
@@ -108,6 +116,10 @@ class Scheduler(object):
                 subreddit=yaml_data["subreddit"],
                 title=yaml_data["title"],
                 body_md=yaml_data["body"],
+                submit_with_thumbnail=yaml_data.get(
+                    "submit_with_thumbnail",
+                    True,
+                ),
             )
         except (AttributeError, KeyError) as missing_data_error:
             log.exception("scheduled_post_incomplete")
@@ -146,3 +158,32 @@ class Scheduler(object):
 
         with open(self.scheduled_post_file, "w") as sample_post_file:
             sample_post_file.write(yaml_content)
+
+    def prepare_post(self, post: Post) -> None:
+        """
+        Prepare the post for the submission with thumbnail.
+
+        Converted the post to the Rich Text JSON format so that Reddit creates
+        a thumbnail for the post.
+        """
+        log.debug("scheduled_post_convert")
+        try:
+            post.body_rtjson = self.post_converter.convert_to_rtjson(
+                post.body_md,
+            )
+        except ImageNotFound:
+            log.warning("scheduled_post_missing_image", post=str(post))
+            post.submit_with_thumbnail = False
+            click.echo(click.style(
+                "Warning: No image found in the post.\n" +
+                "To submit a post without image set the " +
+                "'submit_with_thumbnail' option to False.",
+                fg="red",
+            ))
+        except (RedditError, PostConversionError) as exception:
+            log.exception("scheduled_post_convert_error")
+            exception.hint = (
+                "To avoid further issues you can submit a post without " +
+                "image by setting the 'submit_with_thumbnail' option to False."
+            )
+            raise
