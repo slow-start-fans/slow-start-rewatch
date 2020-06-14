@@ -76,11 +76,13 @@ def test_username(
         assert reddit_cutifier.username
 
 
+@patch.object(RedditCutifier, "update_post")
 @patch("slow_start_rewatch.reddit.reddit_cutifier.RedditHelper")
 @patch("slow_start_rewatch.reddit.reddit_cutifier.Reddit")
 def test_submit_post_with_thumbnail(
     mock_reddit,
     mock_reddit_helper,
+    mock_update_post,
     reddit_cutifier_config,
     post: Post,
 ):
@@ -94,12 +96,14 @@ def test_submit_post_with_thumbnail(
 
     Check that :meth:`Reddit.subreddit()` is not called (used only for posts
     without thumbnail).
+
+    Check that :meth:`RedditCutifier.update_post()` is called.
     """
     post.body_rtjson = [{"c": [{"t": "Slow Start"}]}]
     reddit_cutifier = RedditCutifier(reddit_cutifier_config)
 
     submit_post_rtjson = mock_reddit_helper.return_value.submit_post_rtjson
-    submit_post_rtjson.return_value.permalink = "slow_start_post_link"
+    mock_update_post.return_value.permalink = "slow_start_post_link"
 
     assert reddit_cutifier.submit_post(post) == "slow_start_post_link"
     assert submit_post_rtjson.call_args == call(
@@ -108,13 +112,16 @@ def test_submit_post_with_thumbnail(
         body_rtjson=post.body_rtjson,
     )
     assert not mock_reddit.return_value.subreddit.called
+    assert mock_update_post.called
 
 
+@patch.object(RedditCutifier, "update_post")
 @patch("slow_start_rewatch.reddit.reddit_cutifier.RedditHelper")
 @patch("slow_start_rewatch.reddit.reddit_cutifier.Reddit")
 def test_submit_post_without_thumbnail(
     mock_reddit,
     mock_reddit_helper,
+    mock_update_post,
     reddit_cutifier_config,
     post: Post,
 ):
@@ -138,7 +145,7 @@ def test_submit_post_without_thumbnail(
     reddit_cutifier = RedditCutifier(reddit_cutifier_config)
 
     subreddit = mock_reddit.return_value.subreddit.return_value
-    subreddit.submit.return_value.permalink = "slow_start_post_link"
+    mock_update_post.return_value.permalink = "slow_start_post_link"
 
     assert reddit_cutifier.submit_post(post) == "slow_start_post_link"
     assert subreddit.submit.call_args == call(
@@ -150,6 +157,42 @@ def test_submit_post_without_thumbnail(
     subreddit.submit.side_effect = PrawcoreException
     with pytest.raises(RedditError):
         reddit_cutifier.submit_post(post)
+
+
+@patch("time.sleep")
+@patch("slow_start_rewatch.reddit.reddit_cutifier.Reddit")
+def test_update_post(
+    mock_reddit,
+    mock_sleep,
+    reddit_cutifier_config,
+    post: Post,
+    submission,
+):
+    """
+    Test updating a post.
+
+    1. Test a dry run when the :attr:`Post.submit_with_thumbnail` is False.
+
+    2. Test a successful edit.
+
+    3. Test handling of an exception raised by `PRAW`.
+    """
+    reddit_cutifier = RedditCutifier(reddit_cutifier_config)
+
+    post.submit_with_thumbnail = False
+    reddit_cutifier.update_post(submission, post)
+    assert not mock_sleep.called
+    assert not submission.edit.called
+
+    post.submit_with_thumbnail = True
+    reddit_cutifier.update_post(submission, post)
+
+    assert mock_sleep.call_args == call(2000 / 1000)
+    assert submission.edit.call_args == call(post.body_md)
+
+    submission.edit.side_effect = PrawcoreException
+    with pytest.raises(RedditError):
+        reddit_cutifier.update_post(submission, post)
 
 
 @pytest.fixture()
@@ -164,6 +207,9 @@ def reddit_cutifier_config():
         "http_server": {
             "hostname": HTTP_SERVER_HOSTNAME,
             "port": HTTP_SERVER_PORT,
+        },
+        "reddit_cutifier": {
+            "post_update_delay": 2000,
         },
     })
 

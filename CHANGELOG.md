@@ -13,6 +13,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Update the `Post` to include the attributes needed for submitting a post with thumbnail
 - Implement loading of posts with thumbnails to the `Scheduler`
 - Implement post submission with thumbnails to the `RedditCutifier`
+- Implement post updating to the `RedditCutifier` for restoring the original Markdown of the posts with thumbnail
 
 
 ## Version 0.1.5
