@@ -9,6 +9,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Move the `EmptySchedule` checking from the `Timer` to the `Scheduler`
 - Add the `RedditHelper` class - providing the Reddit's API methods unsupported by `PRAW`
 - Add the `PostImage` class - representing an image in a Reddit post
+- Add the `TextPostConverter` class - converting from Markdown to Reddit Rich Text JSON
 
 
 ## Version 0.1.5

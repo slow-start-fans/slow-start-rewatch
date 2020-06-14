@@ -1,0 +1,246 @@
+[
+  {
+    "c": [
+      {
+        "e": "text",
+        "t": "Slow Start, Episode 1: The First Butterflies",
+        "f": [
+          [
+            2,
+            0,
+            10
+          ]
+        ]
+      }
+    ],
+    "e": "par"
+  },
+  {
+    "c": [
+      {
+        "e": "text",
+        "t": "Let's enjoy the"
+      }
+    ],
+    "e": "par"
+  },
+  {
+    "c": "Slow Start is awesome!",
+    "e": "img",
+    "id": "adorable_id"
+  },
+  {
+    "c": [
+      {
+        "e": "text",
+        "t": "!"
+      }
+    ],
+    "e": "par"
+  },
+  {
+    "e": "hr"
+  },
+  {
+    "c": [
+      {
+        "e": "text",
+        "t": "Streams:",
+        "f": [
+          [
+            1,
+            0,
+            8
+          ]
+        ]
+      }
+    ],
+    "e": "par"
+  },
+  {
+    "c": [
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "u": "https://www.crunchyroll.com/slow-start/episode-1-the-first-butterflies-759027",
+                "e": "link",
+                "t": "Crunchyroll"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "li"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "u": "https://vrv.co/watch/G69P1KQ0Y/Slow-Start:The-First-Butterflies",
+                "e": "link",
+                "t": "VRV"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "li"
+      }
+    ],
+    "e": "list",
+    "o": false
+  },
+  {
+    "e": "hr"
+  },
+  {
+    "c": [
+      {
+        "e": "text",
+        "t": "Show Information:",
+        "f": [
+          [
+            1,
+            0,
+            17
+          ]
+        ]
+      }
+    ],
+    "e": "par"
+  },
+  {
+    "c": [
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "u": "https://myanimelist.net/anime/35540",
+                "e": "link",
+                "t": "MyAnimeList"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "li"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "u": "http://anidb.net/perl-bin/animedb.pl?show=anime&aid=13160",
+                "e": "link",
+                "t": "AniDB"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "li"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "u": "https://anilist.co/anime/98693/SlowStart",
+                "e": "link",
+                "t": "AniList"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "li"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "u": "http://slow-start.com",
+                "e": "link",
+                "t": "Official Website"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "li"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "u": "http://slowstart-usa.com/",
+                "e": "link",
+                "t": "US Website"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "li"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "u": "https://twitter.com/slosta_anime",
+                "e": "link",
+                "t": "Twitter"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "li"
+      },
+      {
+        "c": [
+          {
+            "c": [
+              {
+                "u": "https://www.facebook.com/SlowStartUSA/",
+                "e": "link",
+                "t": "US Facebook Page"
+              }
+            ],
+            "e": "par"
+          }
+        ],
+        "e": "li"
+      }
+    ],
+    "e": "list",
+    "o": false
+  },
+  {
+    "e": "hr"
+  },
+  {
+    "c": [
+      {
+        "u": "https://github.com/slow-start-fans/slow-start-rewatch/blob/0.1.0/assets/happy_shion.gif",
+        "e": "link",
+        "t": "GIF of the day",
+        "f": [
+          [
+            1,
+            0,
+            14
+          ]
+        ]
+      }
+    ],
+    "e": "par"
+  }
+]

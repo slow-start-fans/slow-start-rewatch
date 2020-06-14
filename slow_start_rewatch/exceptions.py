@@ -60,3 +60,11 @@ class MissingRefreshToken(SlowStartRewatchException):
         """Initialize MissingRefreshToken."""
         message = "Refresh token not found."
         super().__init__(message)
+
+
+class ImageNotFound(SlowStartRewatchException):
+    """Indicates the post does not contain an image."""
+
+
+class PostConversionError(SlowStartRewatchException):
+    """Indicates an error when converting a post."""

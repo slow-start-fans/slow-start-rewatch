@@ -24,7 +24,7 @@ INCOMPLETE_POST_FILENAME = "scheduled_post_incomplete.yml"
 
 
 @patch.object(Scheduler, "parse_post_from_yaml")
-def test_load(  # noqa: WPS211
+def test_load(
     mock_parse_post_from_yaml,
     scheduler_config,
     reddit,
@@ -45,7 +45,7 @@ def test_load(  # noqa: WPS211
 
 @patch.object(Scheduler, "create_default")
 @patch.object(Scheduler, "parse_post_from_yaml")
-def test_load_with_exception(  # noqa: WPS211
+def test_load_with_exception(
     mock_parse_post_from_yaml,
     mock_create_default,
     scheduler_config,

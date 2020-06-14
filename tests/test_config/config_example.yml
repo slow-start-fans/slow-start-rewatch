@@ -17,4 +17,10 @@ http_server:
   port: 65000
 
 timer:
-refresh_interval: 200 # milliseconds
+  refresh_interval: 200 # milliseconds
+
+post_image_mime_types:
+  png: image/png
+  jpg: image/jpeg
+  jpeg: image/jpeg
+  gif: image/gif
