@@ -13,7 +13,7 @@ log = get_logger()
 class PostImage(object):
     """Represents an image in a Reddit post."""
 
-    def __init__(  # noqa: WPS211
+    def __init__(
         self,
         source_url: str,
         link_content: str,
