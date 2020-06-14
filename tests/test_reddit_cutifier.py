@@ -76,22 +76,65 @@ def test_username(
         assert reddit_cutifier.username
 
 
+@patch("slow_start_rewatch.reddit.reddit_cutifier.RedditHelper")
 @patch("slow_start_rewatch.reddit.reddit_cutifier.Reddit")
-def test_submit_post_without_thumbnail(
+def test_submit_post_with_thumbnail(
     mock_reddit,
+    mock_reddit_helper,
     reddit_cutifier_config,
     post: Post,
 ):
     """
-    Test submitting a post.
+    Test submitting a post with thumbnail.
+
+    Set the :attr:`Post.body_rtjson` (empty by default).
+
+    Check that :meth:`RedditHelper.submit_post_rtjson()` is called with the
+    correct arguments.
+
+    Check that :meth:`Reddit.subreddit()` is not called (used only for posts
+    without thumbnail).
+    """
+    post.body_rtjson = [{"c": [{"t": "Slow Start"}]}]
+    reddit_cutifier = RedditCutifier(reddit_cutifier_config)
+
+    submit_post_rtjson = mock_reddit_helper.return_value.submit_post_rtjson
+    submit_post_rtjson.return_value.permalink = "slow_start_post_link"
+
+    assert reddit_cutifier.submit_post(post) == "slow_start_post_link"
+    assert submit_post_rtjson.call_args == call(
+        subreddit=post.subreddit,
+        title=post.title,
+        body_rtjson=post.body_rtjson,
+    )
+    assert not mock_reddit.return_value.subreddit.called
+
+
+@patch("slow_start_rewatch.reddit.reddit_cutifier.RedditHelper")
+@patch("slow_start_rewatch.reddit.reddit_cutifier.Reddit")
+def test_submit_post_without_thumbnail(
+    mock_reddit,
+    mock_reddit_helper,
+    reddit_cutifier_config,
+    post: Post,
+):
+    """
+    Test submitting a post without thumbnail.
 
     1. Test successful submission:
+
+    Set :attr:`Post.submit_with_thumbnail` to False (to make the test more
+    obvious even when the `body_rtjson` is empty).
 
     Check that :meth:`Reddit.subreddit().submit()` is called with the correct
     arguments.
 
+    Check that :meth:`RedditHelper.submit_post_rtjson()` is not called (used
+    only for posts with thumbnail).
+
     2. Test handling of an exception raised by `PRAW`.
     """
+    post.submit_with_thumbnail = False
     reddit_cutifier = RedditCutifier(reddit_cutifier_config)
 
     subreddit = mock_reddit.return_value.subreddit.return_value
@@ -102,6 +145,7 @@ def test_submit_post_without_thumbnail(
         title=post.title,
         selftext=post.body_md,
     )
+    assert not mock_reddit_helper.return_value.submit_post_rtjson.called
 
     subreddit.submit.side_effect = PrawcoreException
     with pytest.raises(RedditError):

@@ -12,6 +12,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add the `TextPostConverter` class - converting from Markdown to Reddit Rich Text JSON
 - Update the `Post` to include the attributes needed for submitting a post with thumbnail
 - Implement loading of posts with thumbnails to the `Scheduler`
+- Implement post submission with thumbnails to the `RedditCutifier`
 
 
 ## Version 0.1.5
