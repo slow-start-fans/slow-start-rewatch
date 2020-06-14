@@ -69,7 +69,7 @@ class RedditCutifier(object):
                 post.subreddit,
             ).submit(
                 title=post.title,
-                selftext=post.body,
+                selftext=post.body_md,
             )
         except PrawcoreException as exception:
             log.exception("post_submit_error", exception=exception)

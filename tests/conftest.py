@@ -55,7 +55,7 @@ class MockConfig(Config):
 @pytest.fixture()
 def post():
     """Return an example Post."""
-    body = """*Slow Start*, Episode 1: The First Butterflies
+    body_md = """*Slow Start*, Episode 1: The First Butterflies
 
 ---
 
@@ -81,7 +81,8 @@ def post():
         submit_at=datetime(2018, 1, 6, 12, 0, 0),
         subreddit="anime",
         title="Slow Start - Episode 1 Discussion",
-        body=body,
+        body_md=body_md,
+        submit_with_thumbnail=True,
     )
 
 

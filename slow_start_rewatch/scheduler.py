@@ -107,7 +107,7 @@ class Scheduler(object):
                 submit_at=yaml_data["submit_at"],
                 subreddit=yaml_data["subreddit"],
                 title=yaml_data["title"],
-                body=yaml_data["body"],
+                body_md=yaml_data["body"],
             )
         except (AttributeError, KeyError) as missing_data_error:
             log.exception("scheduled_post_incomplete")

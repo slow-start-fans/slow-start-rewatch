@@ -100,7 +100,7 @@ def test_submit_post_without_thumbnail(
     assert reddit_cutifier.submit_post(post) == "slow_start_post_link"
     assert subreddit.submit.call_args == call(
         title=post.title,
-        selftext=post.body,
+        selftext=post.body_md,
     )
 
     subreddit.submit.side_effect = PrawcoreException
