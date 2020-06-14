@@ -8,7 +8,7 @@ from slow_start_rewatch.post import Post
 
 
 def test_create():
-    """Test creating a Post instance."""
+    """Test creating a `Post` instance."""
     post = Post(
         submit_at=datetime(2018, 1, 6, 12, 0, 0),
         subreddit="anime",
@@ -23,7 +23,7 @@ def test_create():
 
 
 def test_create_with_empty_field():
-    """Test that the Post cannot be instantiated with empty attributes."""
+    """Test that the `Post` cannot be instantiated with empty attributes."""
     with pytest.raises(AttributeError):
         Post(
             submit_at=datetime(2018, 1, 6, 12, 0, 0),
@@ -34,7 +34,7 @@ def test_create_with_empty_field():
 
 
 def test_comparison():
-    """Test the comparison of Post objects."""
+    """Test the comparison of `Post` objects."""
     post = Post(
         submit_at=datetime(2018, 1, 6, 12, 0, 0),
         subreddit="anime",
@@ -62,7 +62,7 @@ def test_comparison():
 
 
 def test_string_representation():
-    """Test the string representation of a Post instance."""
+    """Test the string representation of a `Post` instance."""
     post = Post(
         submit_at=datetime(2018, 1, 6, 12, 0, 0),
         subreddit="anime",

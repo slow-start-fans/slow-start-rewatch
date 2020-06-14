@@ -46,7 +46,7 @@ class AuthorizationError(SlowStartRewatchException):
 
 
 class RedditError(SlowStartRewatchException):
-    """Indicates error when accessing Reddit API."""
+    """Indicates an error when accessing Reddit API."""
 
 
 class InvalidRefreshToken(SlowStartRewatchException):
