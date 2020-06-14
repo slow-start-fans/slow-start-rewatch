@@ -9,7 +9,11 @@ from unittest.mock import patch
 import pytest
 from ruamel.yaml import YAML  # type: ignore
 
-from slow_start_rewatch.exceptions import InvalidSchedule, MissingSchedule
+from slow_start_rewatch.exceptions import (
+    EmptySchedule,
+    InvalidSchedule,
+    MissingSchedule,
+)
 from slow_start_rewatch.scheduler import Scheduler
 from tests.conftest import TEST_ROOT_DIR, MockConfig
 
@@ -30,11 +34,11 @@ def test_load(  # noqa: WPS211
     post.submit_at = datetime.now() + timedelta(minutes=1)
     mock_parse_post_from_yaml.return_value = post
 
-    scheduler = Scheduler(scheduler_config)
+    scheduler = Scheduler(scheduler_config, reddit)
 
     assert not scheduler.scheduled_post
 
-    scheduler.load("cute_tester")
+    scheduler.load()
 
     assert scheduler.scheduled_post == post
 
@@ -48,15 +52,20 @@ def test_load_with_exception(  # noqa: WPS211
     reddit,
     post,
 ):
-    """Test loading of the scheduled post with error."""
-    mock_parse_post_from_yaml.side_effect = FileNotFoundError
+    """Test loading of the scheduled post with errors."""
+    mock_parse_post_from_yaml.side_effect = [FileNotFoundError, post]
 
-    scheduler = Scheduler(scheduler_config)
+    scheduler = Scheduler(scheduler_config, reddit)
 
     with pytest.raises(MissingSchedule):
-        scheduler.load("cute_tester")
+        scheduler.load()
 
     assert mock_create_default.call_count == 1
+
+    with pytest.raises(EmptySchedule):
+        scheduler.load()
+
+    assert scheduler.scheduled_post is None
 
 
 def test_parse_post_from_yaml(
@@ -74,7 +83,7 @@ def test_parse_post_from_yaml(
 
     3. A file with missing fields
     """
-    scheduler = Scheduler(scheduler_config)
+    scheduler = Scheduler(scheduler_config, reddit)
 
     assert scheduler.parse_post_from_yaml(
         post_files[VALID_POST_FILENAME],
@@ -111,11 +120,12 @@ def test_create_default(
 
     scheduler = Scheduler(
         MockConfig({"scheduled_post_file": str(scheduled_post_path)}),
+        reddit,
     )
 
     assert not os.path.exists(scheduled_post_path)
 
-    scheduler.create_default("cute_tester")
+    scheduler.create_default()
 
     with open(scheduled_post_path, "r") as scheduled_post_file:
         yaml_content = scheduled_post_file.read()
