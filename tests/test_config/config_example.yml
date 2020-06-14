@@ -16,6 +16,9 @@ http_server:
   hostname: "127.0.0.1"
   port: 65000
 
+reddit_cutifier:
+  post_update_delay: 2000 # milliseconds
+
 timer:
   refresh_interval: 200 # milliseconds
 

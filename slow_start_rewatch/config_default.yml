@@ -10,9 +10,9 @@ refresh_token_file: "${home_dir}${ps}slow_start_rewatch${ps}reddit_token.dat"
 
 # Reddit OAuth2 settings:
 reddit:
+  user_agent: Slow Start Rewatch Client v${version}
   client_id: DGWt4p3WhWiQWg
   client_secret: # Left empty by default
-  user_agent: Slow Start Rewatch Client v${version}
   # Access permissions required by the program:
   oauth_scope:
     - identity
@@ -26,6 +26,10 @@ reddit:
 http_server:
   hostname: "127.0.0.1"
   port: 65000
+
+# Reddit Cutifier configuration:
+reddit_cutifier:
+  post_update_delay: 2000 # milliseconds
 
 # Timer configuration:
 timer:

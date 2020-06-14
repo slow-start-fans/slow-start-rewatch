@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import time
+
 from praw import Reddit
+from praw.reddit import Submission
 from prawcore.exceptions import PrawcoreException
 from structlog import get_logger
 
@@ -50,6 +53,10 @@ class RedditCutifier(object):
         self.oauth_helper = OAuthHelper(config, self.reddit)
         self.reddit_helper = RedditHelper(config, self.reddit)
 
+        self.post_update_delay = config[
+            "reddit_cutifier.post_update_delay"
+        ]
+
     @property
     def username(self) -> str:
         """Get username."""
@@ -91,7 +98,26 @@ class RedditCutifier(object):
                 "Failed to submit the post.",
             ) from exception
 
-        permalink = submission.permalink
-        log.debug("post_submit_result", permalink=permalink)
+        log.debug("post_submit_result", permalink=submission.permalink)
 
-        return permalink
+        submission = self.update_post(submission, post)
+
+        return submission.permalink
+
+    def update_post(self, submission: Submission, post: Post) -> Submission:
+        """Replace the content of the Submission with the Post Markdown."""
+        if not post.submit_with_thumbnail:
+            return submission
+
+        delay = self.post_update_delay
+        log.debug("post_update_delay", delay=delay)
+        time.sleep(delay / 1000)
+
+        log.info("post_update", post=str(post), submission=submission.id)
+        try:
+            return submission.edit(post.body_md)
+        except PrawcoreException as exception:
+            log.exception("post_update_error")
+            raise RedditError(
+                "Failed to update the post.",
+            ) from exception
