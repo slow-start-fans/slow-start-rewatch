@@ -14,7 +14,7 @@ unit:
 package:
 	poetry check
 	pip check
-	safety check --bare --full-report
+	safety check --bare --full-report --ignore=38330
 
 .PHONY: test
 test: lint unit package
