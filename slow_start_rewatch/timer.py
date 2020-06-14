@@ -9,7 +9,7 @@ import click
 from structlog import get_logger
 
 from slow_start_rewatch.config import Config
-from slow_start_rewatch.exceptions import Abort, EmptySchedule
+from slow_start_rewatch.exceptions import Abort
 
 log = get_logger()
 
@@ -41,15 +41,12 @@ class Timer(object):
 
         if self.start_time > self.target_time:
             log.warning(
-                "scheduled_post_past_date",
+                "timer_invalid_time",
                 start_time=self.start_time,
                 target_time=target_time,
             )
-            raise EmptySchedule(
-                "The post was scheduled in the past: {0}".format(
-                    target_time,
-                ),
-                hint="Please adjust the scheduled time.",
+            raise RuntimeError(
+                "The target time cannot be in the past.",
             )
 
         try:

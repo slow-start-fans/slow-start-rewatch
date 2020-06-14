@@ -6,6 +6,7 @@ We follow [Semantic Versions](https://semver.org/).
 ## Version 0.1.6  (unreleased)
 
 - Refactor the `Scheduler` to improve the exception handling when loading the scheduled post
+- Move the `EmptySchedule` checking from the `Timer` to the `Scheduler`
 
 
 ## Version 0.1.5

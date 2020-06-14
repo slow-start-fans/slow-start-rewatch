@@ -17,7 +17,7 @@ class App(object):
         """Initialize App."""
         self.reddit_cutifier = RedditCutifier(config)
         self.timer = Timer(config)
-        self.scheduler = Scheduler(config)
+        self.scheduler = Scheduler(config, self.reddit_cutifier.reddit)
 
     def run(self) -> None:
         """Runs the application."""
@@ -38,7 +38,7 @@ class App(object):
             click.style(self.reddit_cutifier.username, fg="bright_blue"),
         ))
 
-        self.scheduler.load(self.reddit_cutifier.username)
+        self.scheduler.load()
 
     def start(self) -> None:
         """

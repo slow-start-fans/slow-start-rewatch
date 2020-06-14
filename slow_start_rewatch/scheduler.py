@@ -6,11 +6,16 @@ from string import Template
 from typing import Optional
 
 import click
+from praw import Reddit
 from ruamel.yaml import YAML, YAMLError  # type: ignore
 from structlog import get_logger
 
 from slow_start_rewatch.config import ROOT_DIR, Config
-from slow_start_rewatch.exceptions import InvalidSchedule, MissingSchedule
+from slow_start_rewatch.exceptions import (
+    EmptySchedule,
+    InvalidSchedule,
+    MissingSchedule,
+)
 from slow_start_rewatch.post import Post
 
 DEFAULT_SCHEDULED_POST_FILE = os.path.join(
@@ -29,12 +34,14 @@ class Scheduler(object):
     def __init__(
         self,
         config: Config,
+        reddit: Reddit,
     ) -> None:
         """Initialize Scheduler."""
         self.scheduled_post_file: str = config["scheduled_post_file"]
         self.scheduled_post: Optional[Post] = None
+        self.reddit = reddit
 
-    def load(self, username: str) -> None:
+    def load(self) -> None:
         """
         Load a scheduled post from a file.
 
@@ -46,12 +53,24 @@ class Scheduler(object):
             post = self.parse_post_from_yaml(self.scheduled_post_file)
         except FileNotFoundError:
             log.warning("scheduled_post_missing")
-            self.create_default(username)
+            self.create_default()
             raise MissingSchedule(
                 "The scheduled post file not found.",
                 hint="Created a sample in: {0}".format(
                     self.scheduled_post_file,
                 ),
+            )
+
+        if datetime.now() > post.submit_at:
+            log.warning(
+                "scheduled_post_past_date",
+                target_time=post.submit_at,
+            )
+            raise EmptySchedule(
+                "The post was scheduled in the past: {0}".format(
+                    post.submit_at,
+                ),
+                hint="Please adjust the scheduled time.",
             )
 
         self.scheduled_post = post
@@ -99,7 +118,7 @@ class Scheduler(object):
 
         return post
 
-    def create_default(self, username: str) -> None:
+    def create_default(self) -> None:
         """
         Create a sample scheduled post.
 
@@ -113,7 +132,7 @@ class Scheduler(object):
             "submit_at": (
                 datetime.now() + timedelta(minutes=DEFAULT_DELAY)
             ).isoformat(" ", "seconds"),
-            "subreddit": "u_{0}".format(username),
+            "subreddit": "u_{0}".format(self.reddit.user.me().name),
         }
 
         yaml_content = yaml_template.substitute(post_attributes)

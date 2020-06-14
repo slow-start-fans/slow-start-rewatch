@@ -5,7 +5,7 @@ from unittest.mock import call, patch
 
 import pytest
 
-from slow_start_rewatch.exceptions import Abort, EmptySchedule
+from slow_start_rewatch.exceptions import Abort
 from slow_start_rewatch.timer import Timer
 from tests.conftest import MockConfig
 
@@ -42,13 +42,13 @@ def test_countdown(mock_datetime, mock_time, timer_config):
 
 
 @patch("slow_start_rewatch.timer.datetime")
-def test_empty_schedule(mock_datetime, timer_config):
-    """Test starting the timer after the scheduled time."""
+def test_start_after_target_time(mock_datetime, timer_config):
+    """Test starting the timer after the target time."""
     timer = Timer(timer_config)
 
     mock_datetime.now.return_value = datetime(2018, 1, 6, 13, 0, 0)
 
-    with pytest.raises(EmptySchedule):
+    with pytest.raises(RuntimeError):
         timer.wait(datetime(2018, 1, 6, 12, 0, 0))
 
 
@@ -129,5 +129,5 @@ def test_time_left_invalid_call(timer_config):
 
 @pytest.fixture()
 def timer_config():
-    """Return mock Config for testing Timer."""
+    """Return mock Config for testing the `Timer`."""
     return MockConfig({"timer": {"refresh_interval": 200}})
