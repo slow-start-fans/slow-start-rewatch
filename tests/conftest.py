@@ -26,6 +26,8 @@ HTTP_SERVER_PORT = 65000
 OAUTH_CODE = "anime_girls_are_cute"
 REFRESH_TOKEN = "moe_moe_kyun"  # noqa: S105
 
+TEST_IMAGE_URL = "https://raw.githubusercontent.com/slow-start-fans/slow-start-rewatch/master/assets/happy_shion.gif"  # noqa: E501
+
 
 class MockConfig(Config):
     """
