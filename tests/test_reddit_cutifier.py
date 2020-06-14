@@ -26,10 +26,11 @@ def test_authorize(
     """
     Test initialization and authorization.
 
-    1. Ensure that Reddit instance is initialized with the correct arguments.
+    1. Ensure that the `Reddit` instance is initialized with the correct
+       arguments.
 
     2. Check that the :meth:`OAuthHelper.authorize()` is called during the
-    authorization.
+       authorization.
     """
     reddit_cutifier_config.refresh_token = REFRESH_TOKEN
     reddit_cutifier = RedditCutifier(reddit_cutifier_config)
@@ -62,7 +63,7 @@ def test_username(
     reddit_cutifier_config,
     reddit,
 ):
-    """Test that the username is retrieved from PRAW correctly."""
+    """Test that the username is retrieved from `PRAW` correctly."""
     reddit_cutifier = RedditCutifier(reddit_cutifier_config)
     reddit_cutifier.reddit = reddit
 
@@ -84,7 +85,7 @@ def test_submit_post(
     post,
 ):
     """
-    Test that :meth:`RedditCutifier.submit_post()` uses PRAW methods correctly.
+    Test that :meth:`RedditCutifier.submit_post()` uses `PRAW` correctly.
 
     1. Test a successful post submission.
 
@@ -106,7 +107,7 @@ def test_submit_post(
 
 @pytest.fixture()
 def reddit_cutifier_config():
-    """Return mock Config for testing RedditCutifier."""
+    """Return the mock `Config` for testing the `RedditCutifier`."""
     return MockConfig({
         "reddit": {
             "client_id": "fluffy_client_id",

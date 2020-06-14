@@ -8,7 +8,7 @@ log = get_logger()
 
 
 class Post(object):
-    """Represents scheduled Reddit post."""
+    """Represents a scheduled Reddit post."""
 
     def __init__(
         self,

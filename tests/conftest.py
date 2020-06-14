@@ -85,7 +85,7 @@ def post():
 
 @pytest.fixture()
 def reddit(submission):
-    """Return mock Reddit class."""
+    """Return mock `Reddit` class."""
     mock_reddit = mock.Mock()
     mock_reddit.auth.scopes.return_value = ["headpat", "hug"]
     mock_reddit.auth.url.return_value = "cute_resource_locator"
@@ -98,7 +98,7 @@ def reddit(submission):
 
 @pytest.fixture()
 def submission():
-    """Return mock Submission."""
+    """Return mock `Submission`."""
     mock_submission = mock.Mock()
     mock_submission.permalink = "slow_start_post_link"
 
