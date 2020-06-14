@@ -10,6 +10,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add the `RedditHelper` class - providing the Reddit's API methods unsupported by `PRAW`
 - Add the `PostImage` class - representing an image in a Reddit post
 - Add the `TextPostConverter` class - converting from Markdown to Reddit Rich Text JSON
+- Update the `Post` to include the attributes needed for submitting a post with thumbnail
 
 
 ## Version 0.1.5
