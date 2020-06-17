@@ -3,6 +3,11 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
+## Version 0.1.7 (unreleased)
+
+- Add `ruamel.yaml` to dependencies (missing when installed on Windows)
+
+
 ## Version 0.1.6
 
 - Refactor the `Scheduler` to improve the exception handling when loading the scheduled post
