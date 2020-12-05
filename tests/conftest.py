@@ -9,6 +9,7 @@ It may be also used for extending doctest's context:
 """
 
 import os
+import socket
 from datetime import datetime
 from typing import Optional
 from unittest import mock
@@ -21,12 +22,21 @@ from slow_start_rewatch.post import Post
 
 TEST_ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 HTTP_SERVER_HOSTNAME = "127.0.0.1"
-HTTP_SERVER_PORT = 65000
 
 OAUTH_CODE = "anime_girls_are_cute"
 REFRESH_TOKEN = "moe_moe_kyun"  # noqa: S105
 
 TEST_IMAGE_URL = "https://raw.githubusercontent.com/slow-start-fans/slow-start-rewatch/master/assets/happy_shion.gif"  # noqa: E501
+
+
+def find_free_tcp_port() -> int:
+    """Return random available port."""
+    with socket.socket() as tcp:
+        tcp.bind((HTTP_SERVER_HOSTNAME, 0))
+        return tcp.getsockname()[1]
+
+
+HTTP_SERVER_PORT = find_free_tcp_port()
 
 
 class MockConfig(Config):
