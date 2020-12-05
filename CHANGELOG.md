@@ -3,6 +3,11 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
+## Version 0.1.8 (unreleased)
+
+- Update dependencies
+
+
 ## Version 0.1.7
 
 - Add `ruamel.yaml` to dependencies (missing when installed on Windows)
