@@ -43,6 +43,7 @@ def test_config_interface():
     with pytest.raises(KeyError):
         config["slow_start"]["second_season"] = None
 
+    config["slow_start"] = {}
     config["slow_start.second_season"] = "When?"
     assert config["slow_start"]["second_season"] == "When?"
 

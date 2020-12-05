@@ -5,7 +5,7 @@ from string import Template
 from typing import Optional
 
 import anyconfig
-from dotty_dict import dotty
+from scalpl import Cut
 from structlog import get_logger
 
 from slow_start_rewatch.config_storage import ConfigStorage
@@ -27,7 +27,7 @@ class Config(object):
 
         config_list = [os.path.join(ROOT_DIR, filename)]
 
-        self.config = dotty(anyconfig.load(config_list))
+        self.config = Cut(anyconfig.load(config_list))
 
         self._substitute_placeholders()
 

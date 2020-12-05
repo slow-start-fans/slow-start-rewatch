@@ -14,7 +14,7 @@ from typing import Optional
 from unittest import mock
 
 import pytest
-from dotty_dict import dotty
+from scalpl import Cut
 
 from slow_start_rewatch.config import Config
 from slow_start_rewatch.post import Post
@@ -38,7 +38,7 @@ class MockConfig(Config):
 
     def __init__(self, config_data=None) -> None:
         """Initialize MockConfig."""
-        self.config = dotty(config_data)
+        self.config = Cut(config_data)
         self._refresh_token = None
 
     @property
