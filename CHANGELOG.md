@@ -7,6 +7,7 @@ We follow [Semantic Versions](https://semver.org/).
 
 - Update dependencies
 - Replace `dotty-dict` with `scalpl` to avoid compatibility issues on Windows 10 with Japanese locale
+- Use a random port number for testing the HTTP server (to ensure the port is available)
 
 
 ## Version 0.1.7
