@@ -6,6 +6,7 @@ We follow [Semantic Versions](https://semver.org/).
 ## Version 0.1.8 (unreleased)
 
 - Update dependencies
+- Replace `dotty-dict` with `scalpl` to avoid compatibility issues on Windows 10 with Japanese locale
 
 
 ## Version 0.1.7
