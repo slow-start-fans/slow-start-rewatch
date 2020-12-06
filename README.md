@@ -5,7 +5,7 @@
 
 # Slow Start Rewatch
 
-[![Build Status](https://travis-ci.org/slow-start-fans/slow-start-rewatch.svg?branch=master)](https://travis-ci.org/slow-start-fans/slow-start-rewatch)
+[![Build Status](https://travis-ci.com/slow-start-fans/slow-start-rewatch.svg?branch=master)](https://travis-ci.com/slow-start-fans/slow-start-rewatch)
 [![Coverage](https://coveralls.io/repos/github/slow-start-fans/slow-start-rewatch/badge.svg?branch=master)](https://coveralls.io/github/slow-start-fans/slow-start-rewatch?branch=master)
 [![Python Version](https://img.shields.io/pypi/pyversions/slow-start-rewatch.svg)](https://pypi.org/project/slow-start-rewatch/)
 [![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
