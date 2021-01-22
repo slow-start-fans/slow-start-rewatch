@@ -12,6 +12,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add `Schedule`, `ScheduleStorage` and `ScheduleFileStorage` classes for storing scheduled posts
 - Change the post scheduling to the UTC time
 - Implement the post scheduling based on the data provided by the `Schedule` class
+- Add the `ScheduleWikiStorage` class for storing scheduled posts on Reddit's wiki
 
 
 ## Version 0.1.8

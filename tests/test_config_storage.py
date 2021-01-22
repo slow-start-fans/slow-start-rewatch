@@ -113,5 +113,6 @@ def config_data():
     """Return mock Config data."""
     return {
         "refresh_token": "moe_moe_kyun",
+        "schedule_wiki_url": None,
         "schedule_file": "slow_start_rewatch/schedule.yml",
     }

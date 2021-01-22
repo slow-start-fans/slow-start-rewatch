@@ -13,18 +13,32 @@ from tests.conftest import MockConfig
 
 
 @patch("slow_start_rewatch.schedule.scheduler.ScheduleFileStorage")
+@patch("slow_start_rewatch.schedule.scheduler.ScheduleWikiStorage")
 @patch("slow_start_rewatch.schedule.scheduler.PostHelper")
 def test_load(
     mock_post_helper,
+    mock_schedule_wiki_storage,
     mock_schedule_file_storage,
     scheduler_config,
     reddit,
 ):
     """Test loading of the Schedule."""
+    mock_schedule_wiki_storage.return_value.load.return_value = Mock(
+        subreddit="WikiSource",
+    )
     mock_schedule_file_storage.return_value.load.return_value = Mock(
         subreddit="FileSource",
     )
 
+    scheduler = Scheduler(scheduler_config, reddit)
+
+    scheduler.load()
+    assert scheduler.schedule
+    assert scheduler.schedule.subreddit == "WikiSource"
+
+    # Clear the wiki url
+    scheduler_config["schedule_wiki_url"] = None
+    scheduler_config["schedule_file"] = "schedule.yml"
     scheduler = Scheduler(scheduler_config, reddit)
 
     scheduler.load()
@@ -111,11 +125,11 @@ def test_scheduler_errors(scheduler: Scheduler):
 
 
 @pytest.fixture()
+@patch("slow_start_rewatch.schedule.scheduler.ScheduleWikiStorage")
 @patch("slow_start_rewatch.schedule.scheduler.PostHelper")
-@patch("slow_start_rewatch.schedule.scheduler.ScheduleFileStorage")
 def scheduler(
     mock_post_helper,
-    mock_schedule_file_storage,
+    mock_schedule_wiki_storage,
     scheduler_config,
     reddit,
 ):
@@ -140,7 +154,8 @@ def schedule():
 
 @pytest.fixture()
 def scheduler_config():
-    """Return mock Config with the file storage configured."""
+    """Return mock Config with the wiki storage configured."""
     return MockConfig({
-        "schedule_file": "schedule.yml",
+        "schedule_wiki_url": "/r/anime/wiki/slow-start-rewatch",
+        "schedule_file": None,
     })

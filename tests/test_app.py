@@ -22,7 +22,11 @@ def test_init(
     config = mock_config.return_value
 
     App()
+    assert "schedule_wiki_url" not in config
     assert "schedule_file" not in config
+
+    App(schedule_wiki_url="/r/anime/wiki/slow-start-rewatch")
+    assert config["schedule_wiki_url"] == "/r/anime/wiki/slow-start-rewatch"
 
     App(schedule_file="schedule.yml")
     assert config["schedule_file"] == "schedule.yml"

@@ -18,14 +18,19 @@ class App(object):
 
     def __init__(
         self,
+        schedule_wiki_url: Optional[str] = None,
         schedule_file: Optional[str] = None,
     ) -> None:
         """Initialize App."""
         config = Config()
         config.load()
 
-        if schedule_file:
+        if schedule_wiki_url:
+            config["schedule_wiki_url"] = schedule_wiki_url
+            config["schedule_file"] = None
+        elif schedule_file:
             config["schedule_file"] = schedule_file
+            config["schedule_wiki_url"] = None
 
         self.reddit_cutifier = RedditCutifier(config)
         self.timer = Timer(config)
