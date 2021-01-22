@@ -78,6 +78,8 @@ class Scheduler(object):
                 hint="Please adjust the scheduled time.",
             )
 
+        post.body_md = post.body_template
+
         if post.submit_with_thumbnail:
             self.prepare_post(post)
 
@@ -112,10 +114,11 @@ class Scheduler(object):
 
         try:
             post = Post(
+                name="scheduled_post",
                 submit_at=yaml_data["submit_at"],
                 subreddit=yaml_data["subreddit"],
                 title=yaml_data["title"],
-                body_md=yaml_data["body"],
+                body_template=yaml_data["body"],
                 submit_with_thumbnail=yaml_data.get(
                     "submit_with_thumbnail",
                     True,

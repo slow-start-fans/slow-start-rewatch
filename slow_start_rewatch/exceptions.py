@@ -45,6 +45,10 @@ class MissingSchedule(SlowStartRewatchException):
     """Indicates that data about scheduled posts are missing."""
 
 
+class MissingPost(SlowStartRewatchException):
+    """Indicates that data about post are missing."""
+
+
 class EmptySchedule(SlowStartRewatchException):
     """Indicates there is no scheduled post in the future."""
 
