@@ -3,7 +3,7 @@
 import io
 import json
 from functools import partial
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import requests
 from praw import Reddit, endpoints
@@ -118,6 +118,7 @@ class RedditHelper(object):
         subreddit: str,
         title: str,
         body_rtjson: RichTextJson,
+        flair_id: Optional[str],
     ) -> Submission:
         """
         Submit the Rich Text post to Reddit.
@@ -134,6 +135,7 @@ class RedditHelper(object):
                 "richtext_json": json.dumps({"document": body_rtjson}),
                 "sendreplies": True,
                 "title": title,
+                "flair_id": flair_id,
                 "nsfw": False,
                 "spoiler": False,
                 "validate_on_submit": True,

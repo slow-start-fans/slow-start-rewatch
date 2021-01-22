@@ -49,10 +49,6 @@ class MissingPost(SlowStartRewatchException):
     """Indicates that data about post are missing."""
 
 
-class EmptySchedule(SlowStartRewatchException):
-    """Indicates there is no scheduled post in the future."""
-
-
 class Abort(SlowStartRewatchException):
     """An internal signal that Ctrl+C has been pressed."""
 
@@ -89,3 +85,7 @@ class ImageNotFound(SlowStartRewatchException):
 
 class PostConversionError(SlowStartRewatchException):
     """Indicates an error when converting a post."""
+
+
+class InvalidWikiLink(SlowStartRewatchException):
+    """Indicates the Wiki source was not found."""

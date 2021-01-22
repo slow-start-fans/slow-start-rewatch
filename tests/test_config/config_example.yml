@@ -7,7 +7,7 @@ data_dir: "${home_dir}${ps}slow_start_rewatch"
 
 local_config_file: "${home_dir}${ps}slow_start_rewatch${ps}config_local.yml"
 
-scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
+schedule_file: "${home_dir}${ps}slow_start_rewatch${ps}schedule.yml"
 
 reddit:
   user_agent: Slow Start Rewatch Client v${version}

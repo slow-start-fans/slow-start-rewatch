@@ -5,8 +5,9 @@ data_dir: "${home_dir}${ps}slow_start_rewatch"
 # The file where the local Config items are stored:
 local_config_file: "${home_dir}${ps}slow_start_rewatch${ps}config_local.yml"
 
-# The YAML file with the data about a scheduled post:
-scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
+# The YAML file with the data about the schedule:
+schedule_file: "${home_dir}${ps}slow_start_rewatch${ps}schedule.yml"
+
 
 # Reddit OAuth2 settings:
 reddit:

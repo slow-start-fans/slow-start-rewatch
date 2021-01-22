@@ -143,6 +143,7 @@ def test_submit_post_rtjson(
         subreddit="anime",
         title="Slow Start Rewatch - Episode 1 Discussion",
         body_rtjson=[{"c": [{"t": "Awesome Content"}]}],
+        flair_id=None,
     )
 
     assert reddit.post.called
