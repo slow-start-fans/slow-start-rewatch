@@ -22,7 +22,7 @@ Provide a command-line utility for hosting an awesome Slow Start Rewatch.
 
 - Schedule a submission of multiple Reddit posts
 - Templates-based posts with dynamically updated link references to other posts
-- Store the post schedule in the local file
+- Store the post schedule in a local file or Reddit's wiki
 - Reddit authorization via OAuth2 using a local HTTP server with cute GIFs
 - Storing the refresh token locally to keep the authorization active
 - Submitting text posts with thumbnails
@@ -38,11 +38,26 @@ pip install slow-start-rewatch
 
 ## Usage
 
-Launch the program from the command line:
+When started for the first time the location of the schedule must be set.
+
+1. Using the schedule stored in Reddit's wiki:
+
+```bash
+slow-start-rewatch -w /r/subreddit/wiki/wiki-path
+```
+
+2. Using the schedule stored in the local YAML file:
+
+```bash
+slow-start-rewatch -f /path/to/the/schedule.yml
+```
+
+After the location of the schedule is stored in the local config, the program can be launched without any parameters:
 
 ```bash
 slow-start-rewatch
 ```
+
 
 ## License
 

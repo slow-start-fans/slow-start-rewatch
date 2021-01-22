@@ -67,10 +67,12 @@ log = structlog.get_logger()
 
 @click.command()
 @click.option("--debug", is_flag=True)
+@click.option("-w", "--schedule_wiki_url")
 @click.option("-f", "--schedule_file")
 @click.version_option(version=version(), prog_name=distribution_name)
 def main(
     debug: bool,
+    schedule_wiki_url: Optional[str],
     schedule_file: Optional[str],
 ) -> None:
     """Main entry point for CLI."""
@@ -78,7 +80,10 @@ def main(
         logging.getLogger().setLevel(logging.DEBUG)
 
     try:
-        App(schedule_file=schedule_file).run()
+        App(
+            schedule_wiki_url=schedule_wiki_url,
+            schedule_file=schedule_file,
+        ).run()
     except SlowStartRewatchException as exception:
         click.echo(click.style(str(exception), fg="red"), err=True)
 

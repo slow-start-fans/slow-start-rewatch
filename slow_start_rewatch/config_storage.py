@@ -26,6 +26,7 @@ class ConfigStorage(object):
 
         self.locally_stored_items = [
             "refresh_token",
+            "schedule_wiki_url",
             "schedule_file",
         ]
 

@@ -15,6 +15,9 @@ from slow_start_rewatch.schedule.schedule_file_storage import (
     ScheduleFileStorage,
 )
 from slow_start_rewatch.schedule.schedule_storage import ScheduleStorage
+from slow_start_rewatch.schedule.schedule_wiki_storage import (
+    ScheduleWikiStorage,
+)
 
 log = get_logger()
 
@@ -33,12 +36,14 @@ class Scheduler(object):
         self.post_helper = PostHelper(config, reddit)
 
         self.schedule_storage: ScheduleStorage
-        if config["schedule_file"]:
+        if config["schedule_wiki_url"]:
+            self.schedule_storage = ScheduleWikiStorage(config, reddit)
+        elif config["schedule_file"]:
             self.schedule_storage = ScheduleFileStorage(config)
         else:
             raise MissingSchedule(
                 "Schedule storage not defined.",
-                hint="The Schedule must be stored in a file.",
+                hint="The Schedule must be stored in a file or Reddit's wiki.",
             )
 
     def load(self) -> None:
