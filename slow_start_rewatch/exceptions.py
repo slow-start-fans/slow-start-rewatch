@@ -20,6 +20,23 @@ class SlowStartRewatchException(Exception):
         return self.message
 
 
+class MissingLocalConfig(SlowStartRewatchException):
+    """Indicates that the local config file does not exist."""
+
+    def __init__(self):
+        """Initialize MissingLocalConfig."""
+        message = "Local config file not found."
+        super().__init__(message)
+
+
+class InvalidLocalConfig(SlowStartRewatchException):
+    """Indicates an error in the local config file."""
+
+
+class ConfigError(SlowStartRewatchException):
+    """Indicates an error when accessing the config."""
+
+
 class InvalidSchedule(SlowStartRewatchException):
     """Indicates an error in the data about scheduled posts."""
 

@@ -28,7 +28,7 @@ from tests.conftest import (
 
 def test_valid_token(oauth_helper_config, reddit):
     """Test the authorization with a valid token."""
-    oauth_helper_config.refresh_token = REFRESH_TOKEN
+    oauth_helper_config["refresh_token"] = REFRESH_TOKEN
     oauth_helper = OAuthHelper(oauth_helper_config, reddit)
 
     oauth_helper.authorize()
@@ -62,16 +62,16 @@ def test_invalid_token(mock_authorize_via_oauth, oauth_helper_config, reddit):
     response.status_code = 400
     reddit.auth.scopes.side_effect = ResponseException(response)
 
-    oauth_helper_config.refresh_token = REFRESH_TOKEN
+    oauth_helper_config["refresh_token"] = REFRESH_TOKEN
     oauth_helper = OAuthHelper(oauth_helper_config, reddit)
 
     oauth_helper.authorize()
 
     assert reddit.auth.scopes.call_count == 1
     assert mock_authorize_via_oauth.call_count == 1
-    assert oauth_helper.config.refresh_token is None
+    assert oauth_helper.config["refresh_token"] is None
 
-    oauth_helper.config.refresh_token = REFRESH_TOKEN
+    oauth_helper.config["refresh_token"] = REFRESH_TOKEN
 
     with pytest.raises(InvalidRefreshToken):
         oauth_helper.authorize_via_token()
@@ -92,7 +92,7 @@ def test_failed_token_validation(
         None,
     ]
 
-    oauth_helper_config.refresh_token = REFRESH_TOKEN
+    oauth_helper_config["refresh_token"] = REFRESH_TOKEN
     oauth_helper = OAuthHelper(oauth_helper_config, reddit)
     with pytest.raises(RedditError):
         oauth_helper.authorize()
@@ -120,11 +120,11 @@ def test_successful_authorization(
 
     oauth_helper = OAuthHelper(oauth_helper_config, reddit)
 
-    assert oauth_helper.config.refresh_token is None
+    assert oauth_helper.config["refresh_token"] is None
 
     oauth_helper.authorize()
 
-    assert oauth_helper.config.refresh_token == REFRESH_TOKEN
+    assert oauth_helper.config["refresh_token"] == REFRESH_TOKEN
     assert webbrowser_open_new.call_count == 1
     assert reddit.auth.authorize.call_args == call(OAUTH_CODE)
 
@@ -145,7 +145,7 @@ def test_failed_authorization(
     with pytest.raises(AuthorizationError):
         oauth_helper.authorize()
 
-    assert oauth_helper.config.refresh_token is None
+    assert oauth_helper.config["refresh_token"] is None
 
 
 @patch.object(http_server, "run")
@@ -171,7 +171,7 @@ def test_failed_token_retrieval(
     with pytest.raises(AuthorizationError):
         oauth_helper.authorize()
 
-    assert oauth_helper.config.refresh_token is None
+    assert oauth_helper.config["refresh_token"] is None
 
 
 @pytest.fixture()
@@ -183,4 +183,5 @@ def oauth_helper_config():
             "hostname": HTTP_SERVER_HOSTNAME,
             "port": HTTP_SERVER_PORT,
         },
+        "refresh_token": None,
     })

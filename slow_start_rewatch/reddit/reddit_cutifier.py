@@ -47,7 +47,7 @@ class RedditCutifier(object):
             client_id=client_id,
             client_secret=client_secret,
             redirect_uri=redirect_uri,
-            refresh_token=config.refresh_token,
+            refresh_token=config["refresh_token"],
         )
 
         self.oauth_helper = OAuthHelper(config, self.reddit)

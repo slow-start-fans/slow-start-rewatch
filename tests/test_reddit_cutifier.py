@@ -213,6 +213,6 @@ def reddit_cutifier_config():
         },
     })
 
-    config.refresh_token = REFRESH_TOKEN
+    config["refresh_token"] = REFRESH_TOKEN
 
     return config

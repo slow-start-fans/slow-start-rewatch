@@ -7,7 +7,7 @@ We follow [Semantic Versions](https://semver.org/).
 
 - Update the link to the Status image in the README file
 - Update dependencies
-
+- Extend `Config` to allow storing more items locally (using YAML)
 
 ## Version 0.1.8
 

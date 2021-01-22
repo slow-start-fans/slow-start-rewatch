@@ -11,7 +11,6 @@ It may be also used for extending doctest's context:
 import os
 import socket
 from datetime import datetime
-from typing import Optional
 from unittest import mock
 
 import pytest
@@ -43,23 +42,19 @@ class MockConfig(Config):
     """
     Simplified version of the Config class.
 
-    The refresh token isn't stored permanently.
+    The data aren't stored permanently.
     """
 
     def __init__(self, config_data=None) -> None:
         """Initialize MockConfig."""
         self.config = Cut(config_data)
-        self._refresh_token = None
 
-    @property
-    def refresh_token(self) -> Optional[str]:
-        """Get the refresh token."""
-        return self._refresh_token
+    def __setitem__(self, key, item_value) -> None:
+        """Set the config item."""
+        self.config[key] = item_value
 
-    @refresh_token.setter
-    def refresh_token(self, refresh_token) -> None:
-        """Set the refresh token."""
-        self._refresh_token = refresh_token
+    def load(self) -> None:
+        """Dummy load."""
 
 
 @pytest.fixture()
