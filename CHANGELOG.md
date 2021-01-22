@@ -7,7 +7,8 @@ We follow [Semantic Versions](https://semver.org/).
 
 - Update the link to the Status image in the README file
 - Update dependencies
-- Extend `Config` to allow storing more items locally (using YAML)
+- Extend the `Config` to allow storing more items locally (using YAML)
+- Initialize the `Config` inside the `App` class to handle errors during the `Config` loading
 
 ## Version 0.1.8
 

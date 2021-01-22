@@ -9,7 +9,6 @@ import click
 import structlog
 
 from slow_start_rewatch.app import App
-from slow_start_rewatch.config import Config
 from slow_start_rewatch.exceptions import SlowStartRewatchException
 from slow_start_rewatch.version import distribution_name, version
 
@@ -73,12 +72,8 @@ def main(debug) -> None:
     if debug:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    config = Config()
-
-    app = App(config)
-
     try:
-        app.run()
+        App().run()
     except SlowStartRewatchException as exception:
         click.echo(click.style(str(exception), fg="red"), err=True)
 
