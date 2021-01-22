@@ -83,8 +83,8 @@ def post():
 """  # noqa: E501
 
     return Post(
-        name="scheduled_post",
-        submit_at=datetime(2018, 1, 6, 12, 0, 0),
+        name="episode_01",
+        submit_at=datetime(2018, 1, 6, 17, 0, 0),
         subreddit="anime",
         title="Slow Start - Episode 1 Discussion",
         body_template=body_template,

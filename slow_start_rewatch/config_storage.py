@@ -26,6 +26,7 @@ class ConfigStorage(object):
 
         self.locally_stored_items = [
             "refresh_token",
+            "schedule_file",
         ]
 
     def load(self) -> Dict[str, Optional[str]]:

@@ -42,7 +42,7 @@ def test_saving_incomplete_config(tmpdir):
     existing_path = tmpdir.join("config_local.yml")
     config_storage = ConfigStorage(existing_path)
 
-    config_data = {}  # type: ignore
+    config_data = {"refresh_token": "moe_moe_kyun"}
 
     with pytest.raises(ConfigError):
         config_storage.save(config_data)
@@ -97,7 +97,7 @@ def test_loading_incomplete_file(tmpdir):
     """Test error handling of loading an incomplete config file."""
     config_path = tmpdir.join("config_local.yml")
 
-    config_yaml = "config: empty"
+    config_yaml = "refresh_token: moe_moe_kyun"
 
     with open(config_path, "w") as config_file:
         config_file.write(config_yaml)
@@ -113,4 +113,5 @@ def config_data():
     """Return mock Config data."""
     return {
         "refresh_token": "moe_moe_kyun",
+        "schedule_file": "slow_start_rewatch/schedule.yml",
     }

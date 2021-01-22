@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import time
+from typing import List, Optional
 
 from praw import Reddit
+from praw.exceptions import RedditAPIException
 from praw.reddit import Submission
 from prawcore.exceptions import PrawcoreException
 from structlog import get_logger
@@ -69,7 +71,7 @@ class RedditCutifier(object):
         """Authorize user using the :class:`.OAuthHelper`."""
         self.oauth_helper.authorize()
 
-    def submit_post(self, post: Post) -> str:
+    def submit_post(self, post: Post) -> Submission:
         """
         Submit the post to Reddit.
 
@@ -84,6 +86,7 @@ class RedditCutifier(object):
                     subreddit=post.subreddit,
                     title=post.title,
                     body_rtjson=post.body_rtjson,
+                    flair_id=post.flair_id,
                 )
             else:
                 submission = self.reddit.subreddit(
@@ -91,6 +94,7 @@ class RedditCutifier(object):
                 ).submit(
                     title=post.title,
                     selftext=post.body_md,
+                    flair_id=post.flair_id,
                 )
         except PrawcoreException as exception:
             log.exception("post_submit_error")
@@ -98,14 +102,10 @@ class RedditCutifier(object):
                 "Failed to submit the post.",
             ) from exception
 
+        post.submission_id = submission.id
+
         log.debug("post_submit_result", permalink=submission.permalink)
 
-        submission = self.update_post(submission, post)
-
-        return submission.permalink
-
-    def update_post(self, submission: Submission, post: Post) -> Submission:
-        """Replace the content of the Submission with the Post Markdown."""
         if not post.submit_with_thumbnail:
             return submission
 
@@ -113,11 +113,46 @@ class RedditCutifier(object):
         log.debug("post_update_delay", delay=delay)
         time.sleep(delay / 1000)
 
+        return self.update_post(post, submission)
+
+    def update_post(
+        self,
+        post: Post,
+        submission: Optional[Submission] = None,
+    ) -> Submission:
+        """
+        Replace the content of the Submission with the Post Markdown.
+
+        Either `submission` is provided or the `post` must contain the
+        `submission_id` attribute.
+        """
+        if not submission and not post.submission_id:
+            raise RuntimeError(
+                "Trying to update post '{0}' without 'submission_id'".format(
+                    post.name,
+                ),
+            )
+        elif not submission:
+            log.info("submission_load", submission=post.submission_id)
+            submission = self.reddit.submission(post.submission_id)
+
         log.info("post_update", post=str(post), submission=submission.id)
         try:
             return submission.edit(post.body_md)
-        except PrawcoreException as exception:
+        except (PrawcoreException, RedditAPIException) as error:
             log.exception("post_update_error")
             raise RedditError(
-                "Failed to update the post.",
-            ) from exception
+                (
+                    "Failed to update the post 'https://redd.it/{0}'. " +
+                    "Error: {1}"
+                ).format(
+                    post.submission_id,
+                    str(error),
+                ),
+            ) from error
+
+    def update_posts(self, posts: List[Post]) -> None:
+        """Update the content of multiple Submissions."""
+        log.info("posts_update", post_count=len(posts))
+        for post in posts:
+            self.update_post(post)

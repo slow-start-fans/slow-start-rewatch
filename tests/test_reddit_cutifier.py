@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 from typing import Optional
 from unittest.mock import call, patch
 
@@ -77,11 +78,13 @@ def test_username(
 
 
 @patch.object(RedditCutifier, "update_post")
+@patch("time.sleep")
 @patch("slow_start_rewatch.reddit.reddit_cutifier.RedditHelper")
 @patch("slow_start_rewatch.reddit.reddit_cutifier.Reddit")
 def test_submit_post_with_thumbnail(
     mock_reddit,
     mock_reddit_helper,
+    mock_sleep,
     mock_update_post,
     reddit_cutifier_config,
     post: Post,
@@ -97,21 +100,25 @@ def test_submit_post_with_thumbnail(
     Check that :meth:`Reddit.subreddit()` is not called (used only for posts
     without thumbnail).
 
+    Check the delay before updating the post.
+
     Check that :meth:`RedditCutifier.update_post()` is called.
     """
     post.body_rtjson = [{"c": [{"t": "Slow Start"}]}]
     reddit_cutifier = RedditCutifier(reddit_cutifier_config)
 
     submit_post_rtjson = mock_reddit_helper.return_value.submit_post_rtjson
-    mock_update_post.return_value.permalink = "slow_start_post_link"
+    mock_update_post.return_value.permalink = "slow_start_link"
 
-    assert reddit_cutifier.submit_post(post) == "slow_start_post_link"
+    assert reddit_cutifier.submit_post(post).permalink == "slow_start_link"
     assert submit_post_rtjson.call_args == call(
         subreddit=post.subreddit,
         title=post.title,
         body_rtjson=post.body_rtjson,
+        flair_id=post.flair_id,
     )
     assert not mock_reddit.return_value.subreddit.called
+    assert mock_sleep.call_args == call(2000 / 1000)
     assert mock_update_post.called
 
 
@@ -145,12 +152,13 @@ def test_submit_post_without_thumbnail(
     reddit_cutifier = RedditCutifier(reddit_cutifier_config)
 
     subreddit = mock_reddit.return_value.subreddit.return_value
-    mock_update_post.return_value.permalink = "slow_start_post_link"
+    subreddit.submit.return_value.permalink = "slow_start_link"
 
-    assert reddit_cutifier.submit_post(post) == "slow_start_post_link"
+    assert reddit_cutifier.submit_post(post).permalink == "slow_start_link"
     assert subreddit.submit.call_args == call(
         title=post.title,
         selftext=post.body_md,
+        flair_id=post.flair_id,
     )
     assert not mock_reddit_helper.return_value.submit_post_rtjson.called
 
@@ -158,12 +166,12 @@ def test_submit_post_without_thumbnail(
     with pytest.raises(RedditError):
         reddit_cutifier.submit_post(post)
 
+    assert not mock_update_post.called
 
-@patch("time.sleep")
+
 @patch("slow_start_rewatch.reddit.reddit_cutifier.Reddit")
 def test_update_post(
     mock_reddit,
-    mock_sleep,
     reddit_cutifier_config,
     post: Post,
     submission,
@@ -171,34 +179,65 @@ def test_update_post(
     """
     Test updating a post.
 
-    1. Test a dry run when the :attr:`Post.submit_with_thumbnail` is False.
+    1. Test a successful edit.
 
-    2. Test a successful edit.
+    2. Test updating without providing both `submission` parameter and
+       the :attr:`Post.submission_id`.
 
-    3. Test handling of an exception raised by `PRAW`.
+    3. Previous test with the `submission_id` provided.
+
+    4. Test handling of an exception raised by `PRAW`.
     """
     reddit_cutifier = RedditCutifier(reddit_cutifier_config)
 
-    post.submit_with_thumbnail = False
-    reddit_cutifier.update_post(submission, post)
-    assert not mock_sleep.called
-    assert not submission.edit.called
+    reddit_cutifier.update_post(post, submission)
 
-    post.submit_with_thumbnail = True
-    reddit_cutifier.update_post(submission, post)
-
-    assert mock_sleep.call_args == call(2000 / 1000)
     assert submission.edit.call_args == call(post.body_md)
+
+    with pytest.raises(RuntimeError):
+        reddit_cutifier.update_post(post)
+
+    post.submission_id = "cute_id"
+    reddit_cutifier.update_post(post)
+
+    assert mock_reddit.return_value.submission.call_args == call("cute_id")
 
     submission.edit.side_effect = PrawcoreException
     with pytest.raises(RedditError):
-        reddit_cutifier.update_post(submission, post)
+        reddit_cutifier.update_post(post, submission)
+
+
+@patch.object(RedditCutifier, "update_post")
+@patch("slow_start_rewatch.reddit.reddit_cutifier.Reddit")
+def test_update_posts(
+    mock_reddit,
+    mock_update_post,
+    reddit_cutifier_config,
+):
+    """Test updating multiple posts."""
+    posts = [
+        Post(
+            name="episode_{0}".format(post_id),
+            submit_at=datetime(2018, 1, 6, 17, 0, 0),
+            subreddit="anime",
+            title="Slow Start - Episode {0} Discussion".format(post_id),
+            body_template="*Slow Start*, Episode {0}".format(post_id),
+        ) for post_id in range(1, 4)
+    ]
+
+    reddit_cutifier = RedditCutifier(reddit_cutifier_config)
+
+    reddit_cutifier.update_posts(posts)
+
+    expected_calls = [call(post) for post in posts]
+
+    assert list(mock_update_post.call_args_list) == expected_calls
 
 
 @pytest.fixture()
 def reddit_cutifier_config():
     """Return the mock `Config` for testing the `RedditCutifier`."""
-    config = MockConfig({
+    return MockConfig({
         "reddit": {
             "user_agent": REDDIT_USER_AGENT,
             "client_id": REDDIT_CLIENT_ID,
@@ -211,8 +250,5 @@ def reddit_cutifier_config():
         "reddit_cutifier": {
             "post_update_delay": 2000,
         },
+        "refresh_token": REFRESH_TOKEN,
     })
-
-    config["refresh_token"] = REFRESH_TOKEN
-
-    return config

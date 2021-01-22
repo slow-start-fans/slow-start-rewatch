@@ -65,7 +65,7 @@ class Config(object):
         }
         keys = [
             "data_dir",
-            "scheduled_post_file",
+            "schedule_file",
             "local_config_file",
             "reddit.user_agent",
         ]

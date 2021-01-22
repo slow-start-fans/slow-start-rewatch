@@ -4,6 +4,7 @@ import logging
 import sys
 import traceback
 from logging.config import dictConfig
+from typing import Optional
 
 import click
 import structlog
@@ -66,14 +67,18 @@ log = structlog.get_logger()
 
 @click.command()
 @click.option("--debug", is_flag=True)
+@click.option("-f", "--schedule_file")
 @click.version_option(version=version(), prog_name=distribution_name)
-def main(debug) -> None:
+def main(
+    debug: bool,
+    schedule_file: Optional[str],
+) -> None:
     """Main entry point for CLI."""
     if debug:
         logging.getLogger().setLevel(logging.DEBUG)
 
     try:
-        App().run()
+        App(schedule_file=schedule_file).run()
     except SlowStartRewatchException as exception:
         click.echo(click.style(str(exception), fg="red"), err=True)
 

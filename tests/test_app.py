@@ -8,6 +8,26 @@ from slow_start_rewatch.app import App
 from tests.conftest import MockConfig
 
 
+@patch("slow_start_rewatch.app.Scheduler")
+@patch("slow_start_rewatch.app.Timer")
+@patch("slow_start_rewatch.app.RedditCutifier")
+@patch("slow_start_rewatch.app.Config", return_value=MockConfig())
+def test_init(
+    mock_config,
+    mock_reddit_cutifier,
+    mock_timer,
+    mock_scheduler,
+):
+    """Test that App parameters are stored to the Congig."""
+    config = mock_config.return_value
+
+    App()
+    assert "schedule_file" not in config
+
+    App(schedule_file="schedule.yml")
+    assert config["schedule_file"] == "schedule.yml"
+
+
 @patch("slow_start_rewatch.app.App.start")
 @patch("slow_start_rewatch.app.App.prepare")
 def test_run(
@@ -53,38 +73,26 @@ def test_prepare(
 @patch("slow_start_rewatch.app.Config", return_value=MockConfig())
 def test_start(
     mock_config,
-    reddit_cutifier,
-    timer,
-    scheduler,
+    mock_reddit_cutifier,
+    mock_timer,
+    mock_scheduler,
     post,
     capsys,
 ):
     """Test that the :meth:`App.start()` runs properly."""
-    scheduler.return_value.scheduled_post = post
+    mock_scheduler.return_value.get_scheduled_posts.return_value = [post]
 
     app = App()
     app.start()
     captured = capsys.readouterr()
 
-    assert timer.return_value.wait.call_count == 1
-    assert reddit_cutifier.return_value.submit_post.call_count == 1
+    assert mock_timer.return_value.wait.call_count == 1
+    assert mock_reddit_cutifier.return_value.submit_post.call_count == 1
 
     assert "Slow Start" in captured.out
 
-
-@patch("slow_start_rewatch.app.Scheduler")
-@patch("slow_start_rewatch.app.Timer")
-@patch("slow_start_rewatch.app.RedditCutifier")
-@patch("slow_start_rewatch.app.Config", return_value=MockConfig())
-def test_start_invalid_call(mock_config, reddit_cutifier, timer, scheduler):
-    """Test that :meth:`App.start()` cannot be called early."""
-    scheduler.return_value.scheduled_post = None
-    app = App()
-
-    with pytest.raises(RuntimeError):
-        app.start()
-
-    assert timer.return_value.wait.call_count == 0
+    assert mock_scheduler.return_value.save_schedule.call_count == 1
+    assert mock_reddit_cutifier.return_value.update_posts.call_count == 1
 
 
 @pytest.fixture()
