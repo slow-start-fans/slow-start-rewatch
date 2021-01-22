@@ -60,7 +60,7 @@ class MockConfig(Config):
 @pytest.fixture()
 def post():
     """Return an example Post."""
-    body_md = """*Slow Start*, Episode 1: The First Butterflies
+    body_template = """*Slow Start*, Episode 1: The First Butterflies
 
 ---
 
@@ -83,10 +83,11 @@ def post():
 """  # noqa: E501
 
     return Post(
+        name="scheduled_post",
         submit_at=datetime(2018, 1, 6, 12, 0, 0),
         subreddit="anime",
         title="Slow Start - Episode 1 Discussion",
-        body_md=body_md,
+        body_template=body_template,
         submit_with_thumbnail=True,
     )
 

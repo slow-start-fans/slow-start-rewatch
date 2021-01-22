@@ -10,16 +10,22 @@ from slow_start_rewatch.reddit.reddit_helper import RichTextJson
 log = get_logger()
 
 
-class Post(object):
+class Post(object):  # noqa: WPS230
     """Represents a scheduled Reddit post."""
 
     def __init__(  # noqa: WPS211
         self,
+        name: str,
         submit_at: datetime,
         subreddit: str,
         title: str,
-        body_md: str,
+        body_template: str,
         submit_with_thumbnail=True,
+        flair_id=None,
+        navigation_submitted=None,
+        navigation_current=None,
+        navigation_scheduled=None,
+        submission_id=None,
     ) -> None:
         """Initialize Post."""
         log.info(
@@ -30,14 +36,22 @@ class Post(object):
             submit_with_thumbnail=submit_with_thumbnail,
         )
 
-        if not all([submit_at, subreddit, title, body_md]):
-            raise AttributeError("All Post fields must be set.")
+        if not all([name, submit_at, subreddit, title, body_template]):
+            raise AttributeError("Missing required post fields.")
 
+        self.name = name
         self.submit_at = submit_at
         self.subreddit = subreddit
         self.title = title
-        self.body_md = body_md
+        self.body_template = body_template
         self.submit_with_thumbnail = submit_with_thumbnail
+        self.navigation_submitted: str = navigation_submitted or "$link"
+        self.flair_id: Optional[str] = flair_id
+        self.navigation_current: str = navigation_current or ""
+        self.navigation_scheduled: str = navigation_scheduled or ""
+        self.submission_id: Optional[str] = submission_id
+
+        self.body_md: Optional[str] = None
         self.body_rtjson: Optional[RichTextJson] = None
 
     def __eq__(self, other: object) -> bool:
@@ -46,15 +60,17 @@ class Post(object):
             return NotImplemented
 
         return (
+            self.name,
             self.submit_at,
             self.subreddit,
             self.title,
-            self.body_md,
+            self.body_template,
         ) == (
+            other.name,
             other.submit_at,
             other.subreddit,
             other.title,
-            other.body_md,
+            other.body_template,
         )
 
     def __str__(self):
