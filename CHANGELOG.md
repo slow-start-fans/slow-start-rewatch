@@ -3,7 +3,7 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
-## Version 0.1.9 (unreleased)
+## Version 0.2.0
 
 - Update the link to the Status image in the README file
 - Update dependencies
