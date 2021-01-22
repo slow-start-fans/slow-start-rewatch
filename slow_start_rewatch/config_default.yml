@@ -2,11 +2,11 @@
 # the home directory.
 data_dir: "${home_dir}${ps}slow_start_rewatch"
 
+# The file where the local Config items are stored:
+local_config_file: "${home_dir}${ps}slow_start_rewatch${ps}config_local.yml"
+
 # The YAML file with the data about a scheduled post:
 scheduled_post_file: "${home_dir}${ps}slow_start_rewatch${ps}scheduled_post.yml"
-
-# The file where the refresh token is stored:
-refresh_token_file: "${home_dir}${ps}slow_start_rewatch${ps}reddit_token.dat"
 
 # Reddit OAuth2 settings:
 reddit:
@@ -20,6 +20,7 @@ reddit:
     - submit
     - edit
     - wikiedit
+    - wikiread
     - flair
 
 # Local HTTP server used for the OAuth2 callback:

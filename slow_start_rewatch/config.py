@@ -2,7 +2,6 @@
 
 import os
 from string import Template
-from typing import Optional
 
 import anyconfig
 from scalpl import Cut
@@ -21,9 +20,12 @@ log = get_logger()
 class Config(object):
     """Provides configuration for the Slow Start Rewatch."""
 
-    def __init__(self, filename: str = DEFAULT_CONFIG_FILENAME) -> None:
+    def __init__(
+        self,
+        filename: str = DEFAULT_CONFIG_FILENAME,
+    ) -> None:
         """Initialize Config."""
-        log.debug("config_load", filename=filename)
+        log.debug("default_config_load", filename=filename)
 
         config_list = [os.path.join(ROOT_DIR, filename)]
 
@@ -31,47 +33,28 @@ class Config(object):
 
         self._substitute_placeholders()
 
-        self.storage = ConfigStorage(self.config["refresh_token_file"])
-
-        self._refresh_token: Optional[str] = None
+        self.storage = ConfigStorage(self.config["local_config_file"])
 
     def __getitem__(self, key):
         """Return the config item."""
         return self.config[key]
 
-    def __setitem__(self, key, item_value):
+    def __setitem__(self, key, item_value) -> None:
         """Set the config item."""
+        if key in self.config and self.config[key] == item_value:
+            return
+
+        log.debug("config_save", key=key, item_value=item_value)
         self.config[key] = item_value
+        self.storage.save(self.config)
 
     def __contains__(self, key):
         """Return true if an item exists in the config."""
         return key in self.config
 
-    @property
-    def refresh_token(self) -> Optional[str]:
-        """
-        Get the refresh token.
-
-        Try to load the token if not set.
-        """
-        if not self._refresh_token:
-            self._refresh_token = self.storage.load_refresh_token()
-
-        return self._refresh_token
-
-    @refresh_token.setter
-    def refresh_token(self, refresh_token: Optional[str]) -> None:
-        """
-        Set and save the refresh token.
-
-        If the value is set to None delete the stored token.
-        """
-        if refresh_token:
-            self._refresh_token = refresh_token.strip()
-            self.storage.save_refresh_token(self._refresh_token)
-        else:
-            self._refresh_token = None
-            self.storage.delete_refresh_token()
+    def load(self) -> None:
+        """Load config items from the local storage."""
+        self.config.update(self.storage.load())
 
     def _substitute_placeholders(self) -> None:
         """Substitute the placeholders in the config."""
@@ -83,7 +66,7 @@ class Config(object):
         keys = [
             "data_dir",
             "scheduled_post_file",
-            "refresh_token_file",
+            "local_config_file",
             "reddit.user_agent",
         ]
 

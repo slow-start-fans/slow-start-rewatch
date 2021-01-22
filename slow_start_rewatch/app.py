@@ -15,6 +15,7 @@ class App(object):
 
     def __init__(self, config: Config) -> None:
         """Initialize App."""
+        config.load()
         self.reddit_cutifier = RedditCutifier(config)
         self.timer = Timer(config)
         self.scheduler = Scheduler(config, self.reddit_cutifier.reddit)

@@ -50,7 +50,7 @@ class OAuthHelper(object):
 
     def authorize_via_token(self) -> None:
         """Authorize via the refresh token if the token exists."""
-        if not self.config.refresh_token:
+        if not self.config["refresh_token"]:
             log.warning("refresh_token_missing")
             raise MissingRefreshToken
 
@@ -71,7 +71,7 @@ class OAuthHelper(object):
             if exception.response.status_code == BAD_REQUEST_ERROR:
                 # Reddit throws a generic 400 error when the refresh token is
                 # not accepted.
-                self.config.refresh_token = None
+                self.config["refresh_token"] = None
                 log.error("refresh_token_invalid")
                 raise InvalidRefreshToken(
                     "Cannot log in with the stored refresh token. " +
@@ -142,4 +142,4 @@ class OAuthHelper(object):
                 "Reddit hasn't provided the Refresh Token.",
             )
 
-        self.config.refresh_token = refresh_token
+        self.config["refresh_token"] = refresh_token
