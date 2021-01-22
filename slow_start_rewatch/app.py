@@ -13,9 +13,11 @@ from slow_start_rewatch.timer import Timer
 class App(object):
     """The main application object."""
 
-    def __init__(self, config: Config) -> None:
+    def __init__(self) -> None:
         """Initialize App."""
+        config = Config()
         config.load()
+
         self.reddit_cutifier = RedditCutifier(config)
         self.timer = Timer(config)
         self.scheduler = Scheduler(config, self.reddit_cutifier.reddit)

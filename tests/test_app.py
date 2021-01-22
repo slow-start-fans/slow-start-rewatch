@@ -10,23 +10,13 @@ from tests.conftest import MockConfig
 
 @patch("slow_start_rewatch.app.App.start")
 @patch("slow_start_rewatch.app.App.prepare")
-@patch("slow_start_rewatch.app.Scheduler")
-@patch("slow_start_rewatch.app.Timer")
-@patch("slow_start_rewatch.app.RedditCutifier")
 def test_run(
-    mock_reddit_cutifier,
-    mock_timer,
-    mock_scheduler,
     mock_prepare,
     mock_start,
+    app,
 ):
-    """Test that the App instantiates the other components."""
-    app = App(MockConfig())
+    """Test that the :meth:`App.run()` calls the correct methods."""
     app.run()
-
-    assert mock_reddit_cutifier.call_count == 1
-    assert mock_timer.call_count == 1
-    assert mock_scheduler.call_count == 1
 
     assert mock_prepare.call_count == 1
     assert mock_start.call_count == 1
@@ -35,16 +25,19 @@ def test_run(
 @patch("slow_start_rewatch.app.Scheduler")
 @patch("slow_start_rewatch.app.Timer")
 @patch("slow_start_rewatch.app.RedditCutifier")
+@patch("slow_start_rewatch.app.Config", return_value=MockConfig())
 def test_prepare(
+    mock_config,
     mock_reddit_cutifier,
     mock_timer,
     mock_scheduler,
+    app,
     capsys,
 ):
     """Test that the :meth:`App.prepare()` runs properly."""
     mock_reddit_cutifier.return_value.username = "cute_tester"
 
-    app = App(MockConfig())
+    app = App()
     app.prepare()
     captured = capsys.readouterr()
 
@@ -57,7 +50,9 @@ def test_prepare(
 @patch("slow_start_rewatch.app.Scheduler")
 @patch("slow_start_rewatch.app.Timer")
 @patch("slow_start_rewatch.app.RedditCutifier")
+@patch("slow_start_rewatch.app.Config", return_value=MockConfig())
 def test_start(
+    mock_config,
     reddit_cutifier,
     timer,
     scheduler,
@@ -67,7 +62,7 @@ def test_start(
     """Test that the :meth:`App.start()` runs properly."""
     scheduler.return_value.scheduled_post = post
 
-    app = App(MockConfig())
+    app = App()
     app.start()
     captured = capsys.readouterr()
 
@@ -80,12 +75,28 @@ def test_start(
 @patch("slow_start_rewatch.app.Scheduler")
 @patch("slow_start_rewatch.app.Timer")
 @patch("slow_start_rewatch.app.RedditCutifier")
-def test_start_invalid_call(reddit_cutifier, timer, scheduler):
+@patch("slow_start_rewatch.app.Config", return_value=MockConfig())
+def test_start_invalid_call(mock_config, reddit_cutifier, timer, scheduler):
     """Test that :meth:`App.start()` cannot be called early."""
     scheduler.return_value.scheduled_post = None
-    app = App(MockConfig())
+    app = App()
 
     with pytest.raises(RuntimeError):
         app.start()
 
     assert timer.return_value.wait.call_count == 0
+
+
+@pytest.fixture()
+@patch("slow_start_rewatch.app.Scheduler")
+@patch("slow_start_rewatch.app.Timer")
+@patch("slow_start_rewatch.app.RedditCutifier")
+@patch("slow_start_rewatch.app.Config", return_value=MockConfig())
+def app(
+    mock_config,
+    mock_reddit_cutifier,
+    mock_timer,
+    mock_scheduler,
+):
+    """Return the `App` configured for testing."""
+    return App()
