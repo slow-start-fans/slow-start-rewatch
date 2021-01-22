@@ -10,6 +10,8 @@ We follow [Semantic Versions](https://semver.org/).
 - Extend the `Config` to allow storing more items locally (using YAML)
 - Initialize the `Config` inside the `App` class to handle errors during the `Config` loading
 - Add `Schedule`, `ScheduleStorage` and `ScheduleFileStorage` classes for storing scheduled posts
+- Change the post scheduling to the UTC time
+
 
 ## Version 0.1.8
 

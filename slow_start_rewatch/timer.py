@@ -36,7 +36,7 @@ class Timer(object):
 
         The user can interrupt the waiting by pressing Ctrl+C.
         """
-        self.start_time = datetime.now()
+        self.start_time = datetime.utcnow()
         self.target_time = target_time
 
         if self.start_time > self.target_time:
@@ -67,7 +67,7 @@ class Timer(object):
             show_percent=False,
         ) as progressbar:
             for tick in progressbar:
-                current_timestamp = datetime.now().timestamp() * 1000
+                current_timestamp = datetime.utcnow().timestamp() * 1000
 
                 if current_timestamp < tick:
                     time.sleep((tick - current_timestamp) / 1000)

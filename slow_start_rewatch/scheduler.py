@@ -66,7 +66,7 @@ class Scheduler(object):
                 ),
             )
 
-        if datetime.now() > post.submit_at:
+        if datetime.utcnow() > post.submit_at:
             log.warning(
                 "scheduled_post_past_date",
                 target_time=post.submit_at,
@@ -145,7 +145,7 @@ class Scheduler(object):
 
         post_attributes = {
             "submit_at": (
-                datetime.now() + timedelta(minutes=DEFAULT_DELAY)
+                datetime.utcnow() + timedelta(minutes=DEFAULT_DELAY)
             ).isoformat(" ", "seconds"),
             "subreddit": "u_{0}".format(self.reddit.user.me().name),
         }

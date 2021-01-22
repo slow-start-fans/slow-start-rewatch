@@ -23,17 +23,17 @@ def test_countdown(mock_datetime, mock_time, timer_config):
     """
     timer = Timer(timer_config)
 
-    mock_datetime.now.side_effect = [
-        datetime(2018, 1, 6, 11, 59, 59),
-        datetime(2018, 1, 6, 11, 59, 59, 10 * 1000),
-        datetime(2018, 1, 6, 11, 59, 59, 210 * 1000),
+    mock_datetime.utcnow.side_effect = [
+        datetime(2018, 1, 6, 16, 59, 59),
+        datetime(2018, 1, 6, 16, 59, 59, 10 * 1000),
+        datetime(2018, 1, 6, 16, 59, 59, 210 * 1000),
         # Simulating delay in execution
-        datetime(2018, 1, 6, 11, 59, 59, 805 * 1000),
-        datetime(2018, 1, 6, 11, 59, 59, 810 * 1000),
-        datetime(2018, 1, 6, 12, 0, 0, 100 * 1000),
+        datetime(2018, 1, 6, 16, 59, 59, 805 * 1000),
+        datetime(2018, 1, 6, 16, 59, 59, 810 * 1000),
+        datetime(2018, 1, 6, 17, 0, 0, 100 * 1000),
     ]
 
-    timer.wait(datetime(2018, 1, 6, 12, 0, 0))
+    timer.wait(datetime(2018, 1, 6, 17, 0, 0))
 
     # List multiply forbidden by WPS435
     expected_calls = [call(0.19) for index in range(2)]
@@ -46,10 +46,10 @@ def test_start_after_target_time(mock_datetime, timer_config):
     """Test starting the timer after the target time."""
     timer = Timer(timer_config)
 
-    mock_datetime.now.return_value = datetime(2018, 1, 6, 13, 0, 0)
+    mock_datetime.utcnow.return_value = datetime(2018, 1, 6, 18, 0, 0)
 
     with pytest.raises(RuntimeError):
-        timer.wait(datetime(2018, 1, 6, 12, 0, 0))
+        timer.wait(datetime(2018, 1, 6, 17, 0, 0))
 
 
 @patch("slow_start_rewatch.timer.Timer.countdown")
@@ -59,10 +59,10 @@ def test_abort(mock_datetime, mock_countdown, timer_config):
     timer = Timer(timer_config)
 
     mock_countdown.side_effect = KeyboardInterrupt
-    mock_datetime.now.return_value = datetime(2018, 1, 6, 11, 59, 59)
+    mock_datetime.utcnow.return_value = datetime(2018, 1, 6, 16, 59, 59)
 
     with pytest.raises(Abort):
-        timer.wait(datetime(2018, 1, 6, 12, 0, 0))
+        timer.wait(datetime(2018, 1, 6, 17, 0, 0))
 
 
 def test_ticks(timer_config):
@@ -77,15 +77,15 @@ def test_ticks(timer_config):
     with pytest.raises(AttributeError):
         timer.ticks()
 
-    timer.start_time = datetime(2018, 1, 6, 11, 59, 59, 100 * 1000)
-    timer.target_time = datetime(2018, 1, 6, 12, 0, 0)
+    timer.start_time = datetime(2018, 1, 6, 16, 59, 59, 100 * 1000)
+    timer.target_time = datetime(2018, 1, 6, 17, 0, 0)
 
     expected_timestamps = [
-        datetime(2018, 1, 6, 11, 59, 59, 200 * 1000),
-        datetime(2018, 1, 6, 11, 59, 59, 400 * 1000),
-        datetime(2018, 1, 6, 11, 59, 59, 600 * 1000),
-        datetime(2018, 1, 6, 11, 59, 59, 800 * 1000),
-        datetime(2018, 1, 6, 12, 0, 0),
+        datetime(2018, 1, 6, 16, 59, 59, 200 * 1000),
+        datetime(2018, 1, 6, 16, 59, 59, 400 * 1000),
+        datetime(2018, 1, 6, 16, 59, 59, 600 * 1000),
+        datetime(2018, 1, 6, 16, 59, 59, 800 * 1000),
+        datetime(2018, 1, 6, 17, 0, 0),
     ]
 
     expected_ticks = [
@@ -99,9 +99,9 @@ def test_ticks(timer_config):
 
 
 @pytest.mark.parametrize(("tick_datetime", "expected_time_left"), [
-    (datetime(2018, 1, 6, 10, 59, 59, 100 * 1000), "1:00:01"),
-    (datetime(2018, 1, 6, 11, 59, 59, 900 * 1000), "0:00:01"),
-    (datetime(2018, 1, 6, 12), "0:00:00"),
+    (datetime(2018, 1, 6, 15, 59, 59, 100 * 1000), "1:00:01"),
+    (datetime(2018, 1, 6, 16, 59, 59, 900 * 1000), "0:00:01"),
+    (datetime(2018, 1, 6, 17), "0:00:00"),
     (None, ""),
 ],
 )
@@ -109,7 +109,7 @@ def test_time_left(tick_datetime, expected_time_left, timer_config):
     """Test that the remaining time is rendered correctly."""
     timer = Timer(
         config=timer_config,
-        target_time=datetime(2018, 1, 6, 12, 0, 0),
+        target_time=datetime(2018, 1, 6, 17, 0, 0),
     )
 
     tick = int(tick_datetime.timestamp() * 1000) if tick_datetime else None

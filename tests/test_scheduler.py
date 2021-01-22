@@ -45,7 +45,7 @@ def test_load(
     2. Post with the thumbnail (:meth:`Scheduler.prepare_post()` should be
        called)
     """
-    post.submit_at = datetime.now() + timedelta(minutes=1)
+    post.submit_at = datetime.utcnow() + timedelta(minutes=1)
     post.submit_with_thumbnail = False
     mock_parse_post_from_yaml.return_value = post
 
@@ -161,7 +161,7 @@ def test_create_default(
     yaml_data = YAML(typ="safe").load(yaml_content)
 
     assert yaml_data["subreddit"] == "u_cute_tester"
-    assert yaml_data["submit_at"] > datetime.now()
+    assert yaml_data["submit_at"] > datetime.utcnow()
 
 
 @patch("slow_start_rewatch.scheduler.TextPostConverter")
