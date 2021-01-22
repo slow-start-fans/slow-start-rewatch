@@ -20,8 +20,9 @@ Provide a command-line utility for hosting an awesome Slow Start Rewatch.
 
 ## Features
 
-- Schedule a submission of Reddit posts
-- Templates-based posts
+- Schedule a submission of multiple Reddit posts
+- Templates-based posts with dynamically updated link references to other posts
+- Store the post schedule in the local file
 - Reddit authorization via OAuth2 using a local HTTP server with cute GIFs
 - Storing the refresh token locally to keep the authorization active
 - Submitting text posts with thumbnails
