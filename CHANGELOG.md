@@ -3,7 +3,7 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
-## Version 0.2.1 (unreleased)
+## Version 0.2.1
 
 - Update dependencies and setup.cfg
 
