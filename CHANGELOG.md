@@ -9,6 +9,7 @@ We follow [Semantic Versions](https://semver.org/).
 - Add navigation links to the previous and the next post
 - Increase delays before updating posts
 - Ignore post update errors (to proceed with other tasks)
+- Increase verbosity
 
 
 ## Version 0.2.1

@@ -164,6 +164,13 @@ class RedditCutifier(object):
         log.info("posts_update", post_count=len(posts))
 
         for post in posts:
+            click.echo(
+                click.style(
+                    "Updating post: {0}".format(post.title),
+                    fg="cyan",
+                ),
+            )
+
             delay = self.previous_post_update_delay
             log.debug("previous_post_update_delay", delay=delay)
             time.sleep(delay / 1000)
