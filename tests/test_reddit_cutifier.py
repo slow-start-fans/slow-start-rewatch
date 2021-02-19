@@ -175,6 +175,7 @@ def test_update_post(
     reddit_cutifier_config,
     post: Post,
     submission,
+    capsys,
 ):
     """
     Test updating a post.
@@ -203,8 +204,10 @@ def test_update_post(
     assert mock_reddit.return_value.submission.call_args == call("cute_id")
 
     submission.edit.side_effect = PrawcoreException
-    with pytest.raises(RedditError):
-        reddit_cutifier.update_post(post, submission)
+    reddit_cutifier.update_post(post, submission)
+
+    captured = capsys.readouterr()
+    assert "Failed to update the post" in captured.err
 
 
 @patch.object(RedditCutifier, "update_post")

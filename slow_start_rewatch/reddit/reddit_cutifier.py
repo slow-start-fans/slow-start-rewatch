@@ -3,6 +3,7 @@
 import time
 from typing import List, Optional
 
+import click
 from praw import Reddit
 from praw.exceptions import RedditAPIException
 from praw.reddit import Submission
@@ -144,15 +145,19 @@ class RedditCutifier(object):
             return submission.edit(post.body_md)
         except (PrawcoreException, RedditAPIException) as error:
             log.exception("post_update_error")
-            raise RedditError(
-                (
-                    "Failed to update the post 'https://redd.it/{0}'. " +
-                    "Error: {1}"
-                ).format(
-                    post.submission_id,
-                    str(error),
+            click.echo(
+                click.style(
+                    (
+                        "Failed to update the post 'https://redd.it/{0}'. " +
+                        "Error: {1}"
+                    ).format(
+                        post.submission_id,
+                        str(error),
+                    ),
+                    fg="red",
                 ),
-            ) from error
+                err=True,
+            )
 
     def update_posts(self, posts: List[Post]) -> None:
         """Update the content of multiple Submissions."""
