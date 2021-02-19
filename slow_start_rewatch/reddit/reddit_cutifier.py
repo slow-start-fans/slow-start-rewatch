@@ -58,6 +58,9 @@ class RedditCutifier(object):
         self.post_update_delay = config[
             "reddit_cutifier.post_update_delay"
         ]
+        self.previous_post_update_delay = config[
+            "reddit_cutifier.previous_post_update_delay"
+        ]
 
     @property
     def username(self) -> str:
@@ -154,5 +157,10 @@ class RedditCutifier(object):
     def update_posts(self, posts: List[Post]) -> None:
         """Update the content of multiple Submissions."""
         log.info("posts_update", post_count=len(posts))
+
         for post in posts:
+            delay = self.previous_post_update_delay
+            log.debug("previous_post_update_delay", delay=delay)
+            time.sleep(delay / 1000)
+
             self.update_post(post)
