@@ -3,6 +3,7 @@
 import re
 import textwrap
 
+import click
 from praw import Reddit
 from prawcore.exceptions import Forbidden, NotFound, PrawcoreException
 from structlog import get_logger
@@ -63,6 +64,15 @@ class ScheduleWikiStorage(ScheduleStorage):
             subreddit=self.wiki_subreddit,
             wiki_path=self.wiki_path,
         )
+        click.echo(
+            click.style(
+                "Loading the schedule from: /r/{0}/wiki/{1}".format(
+                    self.wiki_subreddit,
+                    self.wiki_path,
+                ),
+                fg="cyan",
+            ),
+        )
 
         try:
             schedule_data = self.wiki[self.wiki_path].content_md
@@ -96,6 +106,15 @@ class ScheduleWikiStorage(ScheduleStorage):
             "post_wiki_read",
             subreddit=self.wiki_subreddit,
             wiki_path=wiki_path,
+        )
+        click.echo(
+            click.style(
+                "Loading the post from: /r/{0}/wiki/{1}".format(
+                    self.wiki_subreddit,
+                    wiki_path,
+                ),
+                fg="cyan",
+            ),
         )
 
         try:
