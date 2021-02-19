@@ -249,6 +249,7 @@ def reddit_cutifier_config():
         },
         "reddit_cutifier": {
             "post_update_delay": 2000,
+            "previous_post_update_delay": 2000,
         },
         "refresh_token": REFRESH_TOKEN,
     })
