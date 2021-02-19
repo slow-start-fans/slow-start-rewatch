@@ -2,6 +2,7 @@
 
 import re
 from string import Template
+from typing import List, Optional
 
 import click
 from praw import Reddit
@@ -31,6 +32,7 @@ class PostHelper(object):
         """Initialize PostHelper."""
         self.reddit = reddit
         self.post_converter = TextPostConverter(config, reddit)
+        self.navigation_links = config["navigation_links"]
 
     def prepare_post(
         self,
@@ -63,12 +65,62 @@ class PostHelper(object):
 
             mapping[schedule_post.name] = navigation_text
 
+        mapping[
+            self.navigation_links["placeholder"]
+        ] = self.build_navigation_links(post, schedule.posts)
+
         post.body_md = Template(post.body_template).safe_substitute(
             mapping,
         )
 
         if prepare_thumbnail and post.submit_with_thumbnail:
             self.prepare_thumbnail(post)
+
+    def build_navigation_links(self, post: Post, posts: List[Post]) -> str:
+        """Build the Navigation Links based on adjacent posts."""
+        last_post: Optional[Post] = None
+        previous_id = None
+        next_id = None
+
+        for schedule_post in posts:
+            if not last_post:
+                last_post = schedule_post
+                continue
+
+            if schedule_post.name == post.name and last_post.navigation_current:
+                previous_id = last_post.submission_id
+            elif last_post.name == post.name:
+                next_id = schedule_post.submission_id
+
+            last_post = schedule_post
+
+        return self.substitute_navigation_links(previous_id, next_id)
+
+    def substitute_navigation_links(
+        self,
+        previous_submission_id: Optional[str],
+        next_submission_id: Optional[str],
+    ) -> str:
+        """
+        Substitute the links in the Navigation Links template.
+
+        1. Choose the template based on available values.
+
+        2. Substitute the links in the template.
+        """
+        if previous_submission_id and next_submission_id:
+            navigation_template = self.navigation_links["template_both"]
+        elif previous_submission_id:
+            navigation_template = self.navigation_links["template_previous"]
+        elif next_submission_id:
+            navigation_template = self.navigation_links["template_next"]
+        else:
+            return self.navigation_links["template_empty"]
+
+        return Template(navigation_template).safe_substitute({
+            "previous_link": "/{0}".format(previous_submission_id),
+            "next_link": "/{0}".format(next_submission_id),
+        })
 
     def prepare_thumbnail(self, post: Post) -> None:
         """
