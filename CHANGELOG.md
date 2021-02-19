@@ -3,7 +3,7 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
-## Version 0.2.2 (unreleased)
+## Version 0.2.2
 
 - Update dependencies and setup.cfg
 - Add navigation links to the previous and the next post
