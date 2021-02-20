@@ -14,7 +14,7 @@ navigation_links:
   template_empty: ""
   template_previous: "[**<-- Previous Episode**]($previous_link)"
   template_next: "[**Next Episode -->**]($next_link)"
-  template_both: "[**<-- Previous Episode**]($previous_link) ︱ [**Next Episode -->**]($next_link)"
+  template_both: "[**<-- Previous Episode**]($previous_link) ~ [**Next Episode -->**]($next_link)"
 
 # Reddit OAuth2 settings:
 reddit:
