@@ -3,6 +3,11 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
+## Version 0.2.3 (unreleased)
+
+- Fix bug caused by an unsupported character in the config on Windows with Japanese encoding
+
+
 ## Version 0.2.2
 
 - Update dependencies and setup.cfg
