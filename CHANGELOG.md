@@ -3,7 +3,7 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
-## Version 0.2.4 (unreleased)
+## Version 0.2.4
 
 - Fix configuration of links to ensure compatibility with Reddit Mobile App
 - Increase delay before updating the post with the thumbnail
