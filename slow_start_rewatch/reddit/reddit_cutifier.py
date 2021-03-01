@@ -115,6 +115,12 @@ class RedditCutifier(object):
 
         delay = self.post_update_delay
         log.debug("post_update_delay", delay=delay)
+        click.echo(
+            click.style(
+                "Waiting {0}s before updating the post.".format(delay / 1000),
+                fg="cyan",
+            ),
+        )
         time.sleep(delay / 1000)
 
         return self.update_post(post, submission)

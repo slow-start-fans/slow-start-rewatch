@@ -38,7 +38,7 @@ http_server:
 
 # Reddit Cutifier configuration:
 reddit_cutifier:
-  post_update_delay: 10000 # milliseconds
+  post_update_delay: 120000 # milliseconds
   previous_post_update_delay: 5000 # milliseconds
 
 # Timer configuration:
