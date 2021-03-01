@@ -3,6 +3,11 @@
 We follow [Semantic Versions](https://semver.org/).
 
 
+## Version 0.2.4 (unreleased)
+
+- Fix configuration of links to ensure compatibility with Reddit Mobile App
+
+
 ## Version 0.2.3
 
 - Fix bug caused by an unsupported character in the config on Windows with Japanese encoding
